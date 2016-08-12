@@ -1,0 +1,31 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      a.close(data-dismiss="modal") ×
+      h4.modal-title=_("Currency converter")
+
+    .modal-body
+      table.table.table-bordered
+        tr
+          td=_("Original price")
+          td
+            span#original-price(data-value=@object.price data-currency=@object.currency.id)=price(@object)
+
+        tr
+          td=_("Convert to")
+          td
+            =select_tag :currency, options_from_collection_for_select(Currency.for_select, :last, :first, Currency.find_by_code("USD").id), :style => "width:300px;"
+
+        tr
+          td=_("Converted price")
+          td
+            span#converted-price
+
+    .modal-footer
+      =_("For informational purposes only. Exchange rates for actual invoicing may be different.")
+
+coffeeview:
+  window.currencies = <%=Currency.select([:id, :code, :rate, :updated_at]).index_by(&:id)%>
+  $ ->
+    $("#currency").select2()
+    $("#currency").change(convertCurrency).change()

@@ -1,0 +1,19 @@
+-brand_modells.each do |brand_modell|
+  tr
+    td
+      =brand_modell.name
+    td
+      =(brand_modell.category.ancestors.to_a << brand_modell.category).map(&:name)*" » "
+    td
+      -if brand_modell.modell_group
+        =brand_modell.modell_group.name
+      -else
+        ="-"
+    td
+      .anchor
+        =brand_modell.offers_count
+    td
+      .tools.btn-group
+        =link_to fa_icon("pencil"), [:edit, brand_modell], class: "btn btn-primary", remote: true
+        =link_to fa_icon("clone"), clone_modell_path(brand_modell, brand_id: brand_modell.brand_id), class: "btn btn-primary custom-tooltip blue-tooltip", method: :put, data: { original_title: "clone model", confirm: _("Are you sure?") }
+        =link_to fa_icon("trash-o"), remove_brand_modell_modell_path(brand_modell, brand_id: brand_modell.brand_id), class: "btn btn-primary", method: :delete, remote: true, data: { confirm: _("Are you sure?") }

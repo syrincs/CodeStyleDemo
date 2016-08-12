@@ -1,0 +1,94 @@
+#navigation-box.pull-left
+  a#navigation-toggle href="#" 
+    span.menu-icon
+  ul#navigation
+    =content_tag :li, class: active_class?(page_path("about"), page_path("the_roepa_concept"), page_path("activities"), page_path("events"), page_path("events"), page_path("vacancies"))
+      =link_to root_path do |n|
+        i.icon-white.icon-home
+        span
+          |  Home
+
+      span.sub-nav-toggle.plus
+      ul
+        li
+          =link_to "Who we are", page_path("about")
+        li
+          =link_to "The ROEPA concept", page_path("the_roepa_concept")
+        li
+          = link_to "Activities", page_path("activities")
+        li
+          = link_to "Events", page_path("events")
+        li
+          = link_to "Vacancies", page_path("vacancies")
+    =content_tag :li, class: active_class?(page_path("bankdetails"), page_path("terms_conditions"), page_path("serialcheck"))
+      =link_to "#" do |n|
+        i.icon-white.icon-wrench
+        span
+          |  Service
+      span.sub-nav-toggle.plus
+      ul
+        li
+          = link_to "Bank details", page_path("bankdetails")
+        li
+          = link_to "Terms & conditions", page_path("terms_conditions")
+        li
+          =link_to _("Serial number check"), page_path("serialcheck")
+        li
+          =link_to _("Distance calcutator"), page_path("distance_calculator")
+        li
+          =link_to _("Unit converter"), page_path("unit_converter")
+        li
+          =link_to _("Interest calculator"), page_path("interest_calculator")
+        li
+          =link_to  _("Trade fairs"), page_path("tradefairs")
+        li
+          =link_to  _("Incoterms"), page_path("incoterms1")
+
+    =content_tag :li, class: active_class?(categories_path)
+      =link_to categories_path do |n|
+        i.icon-white.icon-download
+        span
+          |  Want to buy
+
+    =content_tag :li, class: active_class?(new_offer_path)
+      =link_to new_offer_path do |n|
+        i.icon-white.icon-upload
+        span
+          |  Want to sell
+
+    =content_tag :li, class: active_class?(Branch.order(:position).first)
+      =link_to Branch.order(:position).first, link_html: {class: "btn btn-default y"}, highlights_on: [controller: "branches"] do |n|
+        i.icon-white.icon-envelope
+        span
+          |  Contact
+
+    -if current_user
+      li.active-item
+        span.sub-nav-toggle.plus
+        =link_to inbox_messages_path do |n|
+          i.icon-white.icon-chevron-down
+          i.icon-white.icon-user
+          span
+            =current_user.name
+        ul
+          =render "user_navbar_items"
+          li
+            =link_to session_path, method: :delete do |n|
+              i.icon-white.icon-lock
+              span
+                | &nbsp;
+                =_("Logout")
+
+    -else
+      =content_tag :li, class: ("active" if current_user)
+        span.sub-nav-toggle.plus
+        =link_to new_session_path, { remote: true, 'data-toggle' =>  "modal", 'data-target' => '#login_container' } do |n|
+          i.icon-white.icon-chevron-down
+          span
+            |  My Roepa
+
+        ul
+          li
+            =link_to ("Register"), new_signup_path
+          li
+            =link_to 'Log in', new_session_path, { remote: true, 'data-toggle' =>  "modal", 'data-target' => '#login_container' }

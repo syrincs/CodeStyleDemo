@@ -1,0 +1,11 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      a.close(data-dismiss="modal") ×
+      h4.modal-title=_("Quote request submitted")
+
+    .modal-body
+      p==_("Thank you for your interest in %{name}. <<Inquiry %{id}>> has been created."){ inquiry_path(@inquiry_by_user.inquiry) } % {:name => buyable(@inquiry_by_user.buyable), :id => @inquiry_by_user.inquiry.id}
+      p=_("A sales representative will contact you shortly.")
+
+    .modal-footer

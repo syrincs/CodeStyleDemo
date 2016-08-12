@@ -1,0 +1,91 @@
+-provide :page_title, _("Activities")
+-provide :header_title, "see our activities"
+-provide :foto_class, "foto-gallery"
+-provide :action_button
+  ul.ch-second-grid
+    li.pull-right.download-button
+      .ch-second-item
+        h4
+          | show offers
+          span.download-button-arrow
+        =link_to page_path("buy"), class: "ch-second-info"
+          h4
+            | show offers
+            span.download-button-arrow
+
+-provide :header_area
+  =render "layouts/big_header"
+
+.container.price-page-content
+  .row
+    .span8
+      p.simple-text-14
+        strong Our main activities are:
+        |   Purchase and sale of used graphic arts equipment.  Disassembly and assembly, commissioning, transportation, warehousing, cleaning and overhauling.  Consulting, Evaluations of cpl. factories and individual equipment, spare parts service etc.  Qualified employees, engineers, technicians and instructors are available for worldwide activities at any time.  Furthermore, we are operator of the EDB - the world's first and largest database for used printing- and paper-converting machines, connected to more than 100.000 partners.
+    .span4    
+  br
+  br
+  .gal-button-group.filters-button-group
+    button.gal-button.is-checked data-filter="*"  show all
+    button.gal-button data-filter=".heavy-machines"  heavy machine transport
+    button.gal-button data-filter=".stock-spain"  our stock in spain
+    button.gal-button data-filter=".transportation"  transportation
+    button.gal-button data-filter=".machine-examples"  machine examples
+
+  .row.image-gallery.grid
+    -i = 1
+    -while i < 29  do
+      .span3
+        .image-figure
+          .view.hover-effect-image.element-item.machine-examples data-category="machine-examples"
+            =image_tag "redesign2015/machinery/machine_#{i}.jpg"
+            =link_to(image_path("redesign2015/machinery/machine_#{i}.jpg"), html_options = { class: "mask", data_rel: "colorbox1", rel: "lightbox-cats" }) do
+              span.mask-icon title=("Full Image")  Full Image
+      -i +=1
+    -i = 1
+    -while i < 49  do
+      .span3
+        .image-figure
+          .view.hover-effect-image.element-item.heavy-machines data-category="heavy-machines"
+            =image_tag "redesign2015/machinery/heavy_machine_#{i}.jpg"
+            =link_to(image_path("redesign2015/machinery/heavy_machine_#{i}.jpg"), html_options = { class: "mask", data_rel: "colorbox1", rel: "lightbox-cats" }) do
+              span.mask-icon title=("Full Image")  Full Image
+      -i +=1
+    -i = 1
+    -while i < 7  do
+      .span3
+        .image-figure
+          .view.hover-effect-image.element-item.stock-spain data-category="stock-spain"
+            =image_tag "redesign2015/machinery/stock_spain_#{i}.jpg"
+            =link_to(image_path("redesign2015/machinery/stock_spain_#{i}.jpg"), html_options = { class: "mask", data_rel: "colorbox1", rel: "lightbox-cats" }) do
+              span.mask-icon title=("Full Image")  Full Image
+      -i +=1
+    -i = 1
+    -while i < 100  do
+      .span3
+        .image-figure
+          .view.hover-effect-image.element-item.transportation data-category="transportation"
+            =image_tag "redesign2015/machinery/transportation_#{i}.jpg"
+            =link_to(image_path("redesign2015/machinery/transportation_#{i}.jpg"), html_options = { class: "mask", data_rel: "colorbox1", rel: "lightbox-cats" }) do
+              span.mask-icon title=("Full Image")  Full Image
+      -i +=1
+
+coffeeview:
+  $ ->
+    $grid = $('.grid').isotope(
+      itemSelector: '.element-item'
+      layoutMode: 'fitRows')
+
+    $('.filters-button-group').on 'click', 'button', ->
+      filterValue = $(this).attr('data-filter')
+      $grid.isotope filter: filterValue
+      return
+
+    $('.gal-button-group').each (i, buttonGroup) ->
+      $buttonGroup = $(buttonGroup)
+      $buttonGroup.on 'click', 'button', ->
+        $buttonGroup.find('.is-checked').removeClass 'is-checked'
+        $(this).addClass 'is-checked'
+        return
+      return
+    return

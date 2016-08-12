@@ -1,0 +1,46 @@
+tbody
+  -@mailings.each do |mailing|
+    tr
+      td
+        =l mailing.created_at
+      td
+        =mailing.subject
+      td
+        =mailing.sender.try(:name)
+      td
+        =mailing_query_locations(mailing)
+      td
+        =mailing_query_excluded_locations(mailing)
+      td
+        .pull-right
+          -if mailing.pending?
+            ="-"
+          -else
+            =number_with_delimiter mailing.recipients_count
+      td
+        .anchor
+          -if mailing.delivered?
+            =ago mailing.delivery_finished_at
+          -else
+            -if mailing.in_delivery?
+              |#{number_with_delimiter mailing.deliveries_count} / #{number_with_delimiter mailing.recipients_count}
+            -else
+              =_("pending")
+      td
+        .tools.btn-group
+          =link_to _("Show mailing"), mailing, :class => "btn btn-primary btn-sm clickable"
+          =link_to content_tag("span", "", :class => "caret"), "#", :class => "btn btn-default btn-sm dropdown-toggle", :data => {:toggle => "dropdown"}
+          ul.dropdown-menu.pull-right
+            li=link_to _("Show recipients"), [:recipients, mailing]
+            li.divider
+            -if can?(:copy, mailing)
+              li=link_to _("Copy mailing"), [:copy, mailing]
+            -if can?(:edit, mailing)
+              li=link_to _("Edit mailing"), [:edit, mailing]
+            -if can?(:destroy, mailing)
+              li=link_to _("Delete mailing"), mailing, method: :delete, data: {confirm: _("Are you sure?")}
+
+-if @more > 0
+  tfoot
+    tr
+      td(colspan=10)=link_to _("Show the next %{count} of %{more} more entries.") % {:count => number_with_delimiter([@batch, @more].min), :more => number_with_delimiter(@more)}, mailings_path(:remote => true, :filter => @filter, :offset => @offset + @batch), :class => "more"

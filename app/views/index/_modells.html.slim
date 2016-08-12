@@ -1,0 +1,12 @@
+.modells
+  -Modell.popular.limit(3*20).sort_by(&:name).each do |modell|
+    p=link_to modell.name, "#", :class => "modell", :data => {:id => modell.id}
+
+coffeeview:
+  $("a.modell").click (e) ->
+    e.preventDefault()
+    link = $(@)
+    form = $("<form>").attr(action: <%=searches_path%>, method: "POST").hide()
+    form.append($("<input>").attr(type: "hidden", name: "authenticity_token", value: $('meta[name="csrf-token"]').attr('content')))
+    form.append($("<input>").attr(type: "hidden", name: "search[modell_id]", value: link.data("id")))
+    form.appendTo("body").submit()

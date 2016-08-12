@@ -1,0 +1,46 @@
+-provide :page_title, _("Countries")
+
+=will_paginate @countries, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "countries_page"
+
+table.table.table-hover.table-striped
+  caption
+    h4.pull-left
+      =_("Countries")
+    p.create.btn-group
+      =link_to fa_icon("plus-circle", text: _("New country")), new_country_path, class: "btn btn-info"
+    form.search accept-charset="UTF-8" action="#" method="get" 
+      p.info.pull-left
+        =page_entries_info @countries
+      /input name="continents[search][text]" placeholder="Search" type="text"
+  thead
+    tr
+      th=_("Name")
+      th=_("Assigned employee")
+      th=_("Continents")
+      th=_("Users")
+      th=_("Offers")
+      th
+  tbody
+    -continents_count = Country.joins(:continents).group(:country_id).count
+    -users_count = Country.joins(:users).group(:country_id).count
+    -offers_count = Country.joins(:offers).group(:location_id).count
+    -@countries.order(:name).each do |country|
+      tr
+        td
+          =country.name
+        td
+          -if country.assigned_employee
+            =country.assigned_employee.fullname
+          -else
+            ="-"
+        td=number_with_delimiter(continents_count[country.id] || 0)
+        td=number_with_delimiter(users_count[country.id] || 0)
+        td
+          .anchor
+            =number_with_delimiter(offers_count[country.id] || 0)
+        td    
+          .btn-group
+            =link_to fa_icon("pencil"), [:edit, country], class: "btn btn-primary default-action"
+            =link_to fa_icon("trash-o"), country, method: :delete, data: {confirm: _("Are you sure?")}, class: "btn btn-primary"
+
+=will_paginate @countries, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "countries_page"

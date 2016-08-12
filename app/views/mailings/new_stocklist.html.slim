@@ -1,0 +1,9 @@
+p=_("Dear {firstname} {lastname},")
+
+p=_("please see below our current stocklist. For more information about a machine and to make an inquiry please simply click on the offer no. you are interested in.")
+
+=render "stocklist"
+
+=render "email_signature", user: current_user
+=render "disclaimer"
+

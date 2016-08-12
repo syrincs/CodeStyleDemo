@@ -1,0 +1,11 @@
+-branches.order(:position).each do |branch|
+  tr
+    td
+      =branch.name
+    td.right
+      =number_with_delimiter branch.contacts_count
+    td
+      .btn-group
+        =link_to fa_icon("users"), [branch, :branch_contacts], remote: true, class: "btn btn-primary custom-tooltip blue-tooltip", data: { original_title: "Branch contacts" }
+        =link_to fa_icon("pencil"), [:edit, branch], remote: true, class: "btn btn-primary"
+        =link_to fa_icon("trash-o"), branch, remote: true, class: "btn btn-primary", method: :delete, data: {confirm: _("Are you sure?")}

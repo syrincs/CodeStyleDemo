@@ -1,0 +1,23 @@
+=simple_form_for [@branch, @branch_contact], remote: true, defaults: { label: false }, html: {class: "form-horizontal"} do |f|
+  .modal-content
+    .modal-header
+      button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+      h3 #{action_name.titleize} branch contact
+    .modal-body
+      -if @branch_contact.id
+        ="Created at: #{time(@branch_contact.created_at, false)}"
+        br 
+        ="Updated at: #{time(@branch_contact.updated_at, false)}" 
+        br
+      br
+      =f.input :name, placeholder: _("Name"), autofocus: true
+      =f.input :phone, placeholder: _("Phone")
+      =f.input :mobile, placeholder: _("Mobile")
+      =f.input :fax, placeholder: _("Fax")
+      =f.input :email, placeholder: _("Email")
+      =f.input :position
+      =f.label :position, _("Position"), class: "tag-link"
+    .modal-footer
+      .tools.btn-group
+        =f.submit _("Submit"), class: "btn btn-primary", data: { disable_with: _("Please wait...") }
+        =link_to "Cancel", branch_branch_contacts_path(@branch), remote: true, class: "btn btn-default", "data-dismiss" => "modal"

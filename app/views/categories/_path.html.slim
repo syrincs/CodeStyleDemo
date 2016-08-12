@@ -1,0 +1,5 @@
+-list = ([category]+category.ancestors).reverse
+-list.each do |category|
+  |#{category.name}
+  -unless category == list.last
+    =" => "

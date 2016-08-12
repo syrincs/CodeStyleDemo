@@ -1,0 +1,14 @@
+@convertCurrency = ->
+  $this = $(this)
+  $originalPrice = $("#original-price")
+
+  fromCurrency = currencies[$originalPrice.data('currency')]
+  toCurrency = currencies[$this.val()]
+
+  convertedPrice = if fromCurrency && toCurrency
+    newValue = parseFloat($originalPrice.data('value')) / fromCurrency.rate * toCurrency.rate
+    Math.round(newValue).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+  else
+    "Unknown"
+
+  $("#converted-price").text("#{toCurrency.code} #{convertedPrice}")

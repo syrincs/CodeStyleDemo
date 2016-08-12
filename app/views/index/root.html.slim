@@ -1,0 +1,294 @@
+-provide :page_title, _("Welcome by ROEPA-EDB, a leader in buying and selling used printing & graphic arts machines")
+-provide :page_caption, "x"
+-provide :meta_description, _("ROEPA-EDB one of the European leaders in buying and selling graphic arts machines. Heidelberg, Roland, Mitsubishi, KBA-Rapida, Komori, Polar, Mueller- Martini, etc…")
+
+-provide :slider
+  /! **************************Begin Revolution slider*****************************
+  section.action-area
+    .fullwidthbanner-container
+      .fullwidthbanner
+        ul
+          li data-masterspeed="300" data-slideindex="back" data-slotamount="6" data-target="_blank" data-transition="boxslide" 
+            =image_tag "redesign2015/slider/banner1_startpage.jpg"
+            .caption.large-text.sfb.stt data-captionhidden="on" data-easing="easeOutExpo" data-end="8900" data-endeasing="easeOutExpo" data-speed="300" data-start="500" data-voffset="0" data-x="center" data-y="20" 
+              | Printing
+          li data-masterspeed="300" data-slideindex="back" data-slotamount="6" data-target="_blank" data-transition="slotzoom-vertical" 
+            =image_tag "redesign2015/slider/banner2_startpage.jpg"
+            .caption.large-text.sfb.stt data-captionhidden="on" data-easing="easeOutExpo" data-end="8900" data-endeasing="easeOutExpo" data-speed="300" data-start="500" data-voffset="0" data-x="center" data-y="20" 
+              | Pre-Press
+          li data-masterspeed="300" data-slideindex="back" data-slotamount="6" data-target="_blank" data-transition="slotzoom-horizontal" 
+            =image_tag "redesign2015/slider/banner3_startpage.jpg"
+            .caption.large-text.sfb.stt data-captionhidden="on" data-easing="easeOutExpo" data-end="8900" data-endeasing="easeOutExpo" data-speed="300" data-start="500" data-voffset="0" data-x="center" data-y="20" 
+              | Post-Press
+          li data-delay="9400" data-masterspeed="300" data-slotamount="5" data-target="_blank" data-transition="curtain-2" 
+            =image_tag "redesign2015/slider/roepa_building.jpg"
+            .caption.large-text.sfb.stt data-captionhidden="on" data-easing="easeOutExpo" data-end="8900" data-endeasing="easeOutExpo" data-speed="300" data-start="500" data-voffset="0" data-x="center" data-y="20" 
+              | Our headquarter
+  /      .tp-bannertimer.tp-bottom
+  /! **************************End Revolution slider*****************************
+
+.white-wrap
+  .similar-projects-wrap.horizontal-blue-lines
+    section.container.similar-projects
+      h2.article-title
+        | Offers
+        span of the week
+      ul.bxslider
+        li
+          .view.hover-effect-image
+            img alt="img1" src="http://placehold.it/520x300"
+            a.mask-no-border.show-text href="#" 
+              span.mask-icon
+                | 2009 HEIDELBERG SM 52-4+L Anicolor
+                br
+        li
+          .view.hover-effect-image
+            img alt="img2" src="http://placehold.it/520x300"
+            a.mask-no-border.show-text href="#" 
+              span.mask-icon
+                | 2009 HEIDELBERG SM 52-4+L Anicolor
+                br
+        li
+          .view.hover-effect-image
+            img alt="img3" src="http://placehold.it/520x300"
+            a.mask-no-border.show-text href="#" 
+              span.mask-icon
+                | 2009 HEIDELBERG SM 52-4+L Anicolor
+                br
+        li
+          .view.hover-effect-image
+            img alt="img4" src="http://placehold.it/520x300"
+            a.mask-no-border.show-text href="#" 
+              span.mask-icon
+                | 2009 HEIDELBERG SM 52-4+L Anicolor
+                br
+
+  section.container.blog-style-wrap
+    .row
+      .span12
+        / = render "layouts/sidebar"
+        .page-elements-title-wrap.horizontal-blue-lines.text-center
+          h2.page-elements-title.page-title-position.blue-text Special Offers
+        -offers = Offer.special.limit(30).order(:id).to_a
+        -offers.in_groups_of(3).each do |group|
+          .row.image-gallery
+            -group.each do |offer|
+              .span4
+                =link_to offer do |n|
+                  .special-offer
+                    -if (image = offer.preview_image && Rails.env.production?)
+                      =image_tag image.normal_url
+                    -else
+                      =image_tag "redesign2015/no_image_available_big.png"
+                    .image-capture
+                      h6.bold
+                        =("#{offer.year} #{offer.modell.brand.name} #{offer.modell.name}").truncate(32)
+                      p=offer.description.truncate(100)
+                    btn.btn-primary.btn-xs
+                      | &nbsp;
+                      .fa.fa-search
+                      | &nbsp; Show &nbsp;
+                      / h5.font-style-10
+                      /   =price(offer)
+        .page-elements-title-wrap.horizontal-blue-lines.text-center
+          h2.page-elements-title.page-title-position.blue-text Other available machinery
+        .row
+          -Category.where(name: ["Printing", "Pre-press", "Post-press"]).where(ancestry: nil).order(:position).each do |category|
+            .span4
+              .panel-group.adbox
+                .panel.panel-primary
+                  .panel-heading
+                    =fa_icon "hashtag"
+                    | &nbsp;
+                    =category.name
+                  .panel-body 
+                    -category.children.order(:position).each_with_index do |cat_children, index|
+                      -case category.name
+                      -when "Printing"
+                        -case cat_children.name
+                        -when "Sheet-feed offset"
+                          =render "accordion", cat_children: cat_children
+                        -when "Web presses"
+                          =render "accordion", cat_children: cat_children, color_class: "category-red"
+                        -when "Digital printing"
+                          =render "accordion", cat_children: cat_children, color_class: "category-yellow"
+                        -when "Add ons"
+                          =render "accordion", cat_children: cat_children
+                      -when "Pre-press", "Post-press"
+                        =render "accordion", cat_children: cat_children
+
+                    br
+                    =link_to category, class: "btn btn-info" do |n|
+                      | &nbsp;
+                      | Show more
+                      | &nbsp;
+                      .fa.fa-chevron-right
+                    br
+
+        / -descriptiongroups = Descriptiongroup.order(:id).to_a
+        / -descriptiongroups.in_groups_of(3).each do |group|
+        /   .row
+        /     -group.each do |descriptiongroup|
+        /       -if descriptiongroup
+        /         .span4
+        /           .adbox
+        /             h4
+        /               | &nbsp;
+        /               .fa.fa-hashtag
+        /               | &nbsp;
+        /               =descriptiongroup.name
+        /             -Offer.joins(modell: { category: :descriptiongroup }).where({descriptiongroups: { id: descriptiongroup.id } }).last(12).each do |offer|
+        /               =link_to offer do |n|
+        /                 ="#{offer.year} #{offer.modell.brand.name} #{offer.modell.name}"
+        /                 | &nbsp;
+        /                 .fa.fa-chevron-circle-right
+        /                 br
+        /             br
+        /             .fa.fa-chevron-circle-right
+        /             | &nbsp;
+        /             =link_to "Show more...", "#"
+
+  hr
+
+  /! **************************Begin Benefits*****************************
+  section.container.benefits-wrap.grey-lines
+    .row
+      .span7.benefits
+        h2.section-title
+          | Roepa
+          span.blue-text Benefits
+        p
+          | Since more than an half century we are a reliable partner to the graphic arts industry.  In addition to the utmost best possibility to provide our customers an full service, the proximity to our clients is for us an important mail stone, and therefore we are represented in many countries worldwide with own branches and agencies. 
+        ul.camera_pag_ul
+          li.pag_nav_0.simple-text-14
+            strong We are the biggest 
+            | and most trusted database for used printing equipment.
+          li.pag_nav_1.simple-text-14
+            strong Qualified employees, engineers, technicians and instructors <br>
+            |  are available for worldwide activities at any time.
+            |  Furthermore we are the largest database for used printing- and paper-converting machines in the world. 
+          li.pag_nav_2.simple-text-14
+            strong We offer you
+            |  the best price for popular brands like.
+          li.pag_nav_3.simple-text-14
+            strong Browse through our categories <br>
+            |  or use our individual search to find the printing equipment your are in need.
+          li.pag_nav_4.simple-text-14
+            strong Sell your printing machinery
+            |  for the best possible price.
+          li.pag_nav_5.simple-text-14
+            strong We are operating the EDB <br>
+            | We are connected to more than 100.000 affiliated partners!
+      .span3.offset1
+        ul#carousel.carousel
+          li
+            =image_tag "redesign2015/iPhone-dark.png"
+          li
+            =image_tag "redesign2015/iPhone-blue.png"
+          li
+            =image_tag "redesign2015/iPhone-winblue.png"
+  /! **************************End Benefits*****************************
+  /! **************************Begin Services*****************************
+  .services-wrap.horizontal-blue-lines
+    section.container.services
+      h2.section-title
+        | Available
+        span.blue-text Services
+      ul.bxslider
+        li.bxslider-active.text-center data-order="1" 
+          .bxslider-li-wrap
+            span.cost-reduction-icon
+            h3 Purchase & Sale
+        li.text-center data-order="2" 
+          .bxslider-li-wrap
+            span.multiple-users-icon
+            h3 Dismantling & Loading
+        li.text-center data-order="3" 
+          .bxslider-li-wrap
+            span.cloud-computing-icon
+            h3 Commissioning
+        li.text-center data-order="4" 
+          .bxslider-li-wrap
+            span.quick-support-icon
+            h3 Transportation
+        li.text-center data-order="5" 
+          .bxslider-li-wrap
+            span.quick-support-icon
+            h3 Warehousing
+        li.text-center data-order="6" 
+          .bxslider-li-wrap
+            span.multiple-users-icon
+            h3 Cleaning
+        li.text-center data-order="7" 
+          .bxslider-li-wrap
+            span.cloud-computing-icon
+            h3 Overhauling
+        li.text-center data-order="8" 
+          .bxslider-li-wrap
+            span.cost-reduction-icon
+            h3 Consulting
+      ul.bxslider-description
+        li.description-active
+          p.simple-text-14
+            strong Fusce aliquet euismod luctus.
+            | Aliquam scelerisque tincidunt risus nec pellentesque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed tristique massa. Aenean iaculis diam nec ligula ullamcorper eu tempus dolor ullamcorper. Morbi in nisi tincidunt neque gravida facilisis.  Pellentesque mattis nisl eget neque scelerisque adipiscing. Vestibulum euismod commodo odio sit amet congue. Donec ut sem vel mauris sodales egestas. Nulla eget lorem vitae diam ullamcorper tincidunt ut vel est.
+        li
+          p.simple-text-14
+            strong Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+            | Sed adipiscing fermentum auctor. Mauris convallis mattis risus vitae cursus. Quisque dapibus venenatis lorem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu dui id sapien gravida accumsan. Duis ultrices scelerisque velit eget mollis. Nam rhoncus auctor tortor, eget consectetur magna viverra a. Phasellus non mauris ipsum, in vulputate risus. Praesent non ligula lectus.
+        li
+          p.simple-text-14
+            strong> Aenean facilisis tincidunt nibh, ac condimentum urna auctor ac. Nulla id ultricies ligula.
+            | Nulla ornare placerat eros, non aliquet quam ullamcorper nec. Morbi porta nulla sed elit rhoncus lobortis. Duis sit amet ante a augue pretium cursus pulvinar vel velit. Cras at nunc in libero mollis dignissim in ac metus. Pellentesque venenatis lobortis purus, eu scelerisque neque mattis id. Curabitur ut erat odio, nec posuere lacus. Vivamus vitae pulvinar felis. Duis faucibus nibh pulvinar ipsum fermentum blandit.
+        li
+          p.simple-text-14
+            strong Aenean fermentum eros id purus volutpat id sodales turpis pellentesque.
+            | Donec sapien risus, aliquam quis dictum quis, vehicula vitae mauris. Proin cursus condimentum massa vitae molestie. Aenean nec ligula ante, quis aliquet eros. Aliquam sit amet egestas orci. Aliquam convallis, leo in varius imperdiet, mauris ante accumsan dui, ut faucibus leo purus vel tortor. Suspendisse in varius quam. Maecenas orci libero, dictum sit amet porta et, lobortis ut arcu. Vivamus dolor risus, dignissim vitae pharetra vitae, tincidunt in ligula.
+        li
+          p.simple-text-14
+            strong> Donec sit amet odio non nunc elementum sagittis in eu felis.
+            | Integer feugiat mauris sed arcu euismod a rutrum dui dapibus. Ut id nisl metus. Aliquam dictum, turpis ac rutrum feugiat, felis magna fringilla felis, vel interdum velit turpis sed lorem. Cras sollicitudin est at elit pellentesque nec blandit dui tempus. Cras congue eros in ante lobortis ac dapibus odio dignissim. Aliquam quis massa a quam convallis porttitor. Phasellus a felis massa, quis facilisis leo. Phasellus vitae ligula eros, ac tincidunt metus.
+        li
+          p.simple-text-14
+            strong> Etiam aliquam feugiat ante at faucibus.
+            | Nulla tempus justo sit amet ipsum dapibus nec sollicitudin mauris condimentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacus sapien, molestie ut tempor non, dapibus adipiscing risus. Etiam id urna risus. Vivamus nec sapien erat, volutpat porta diam. Nulla vitae interdum metus. Pellentesque sollicitudin sodales tortor, sollicitudin consequat velit ultrices vitae. Morbi et mi ut arcu egestas laoreet at quis orci. In consectetur placerat orci eu pellentesque.
+        li
+          p.simple-text-14
+            strong Nullam quis nulla quis velit ultrices viverra.
+            | Etiam porta, orci sit amet tincidunt convallis, dolor dui eleifend dui, eget consequat dui ante id massa. Vestibulum nec sapien in sapien pulvinar tempor. Praesent nunc velit, hendrerit sed gravida porttitor, viverra sed quam. Donec erat elit, mattis eget semper egestas, malesuada et nisl. Ut sollicitudin varius elementum. Nunc pulvinar neque id nisl molestie quis ultrices tortor convallis. Nunc viverra leo at odio ornare dictum.
+        li
+          p.simple-text-14
+            strong> Curabitur faucibus, elit ut adipiscing molestie, arcu nisl vehicula nisl, luctus porttitor justo elit sed eros.
+            | Nulla rutrum velit nec nisl bibendum vitae suscipit risus pulvinar. Cras sit amet ligula eu ligula sollicitudin pretium sit amet quis sapien. Ut nec magna sit amet erat pulvinar laoreet. Sed faucibus felis in velit adipiscing volutpat. Praesent faucibus elementum bibendum. Mauris id dui quis metus malesuada congue.  Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+  /! **************************End Services*****************************
+  .container.grey-lines.empty-block.visible-phone
+  /! **************************Begin Client-say*****************************
+  section.container.client-say.grey-lines
+    h2.section-title
+      | Recently
+      span.blue-text Client says
+    ul.client-say-slider
+      li
+        .client-photo-wrap.pull-left
+          figure.client-photo
+            = image_tag "redesign2015/client-photo-1.jpg"
+            figcaption Howard Dublin
+        p.simple-text-16
+          em As a small company, it is important to work with suppliers who are not only professional and trustworthy, but also provide accurate, prompt and courteous service. The staff at ROEPA have accomplished all of these traits during our longterm relationship. Thanks ROEPA team!
+      li
+        .client-photo-wrap.pull-left
+          figure.client-photo
+            = image_tag "redesign2015/client-photo-2.jpg"
+            figcaption James Edkinson
+        p.simple-text-16
+          em We can always rely on ROEPA to have our delivery completed on time which is critical to our operation here at our place. In addition to being an excellent partner to the printing industry, ROEPA is one of the leading business community leaders in our area."
+      li
+        .client-photo-wrap.pull-left
+          figure.client-photo
+            = image_tag "redesign2015/client-photo-3.jpg"
+            figcaption Barbara Mayer
+        p.simple-text-16
+          em ROEPA did an incredible job in delivering our graphic arts equipment. We appreciate their patience through the process as we made many changes. Everyone was a great help and kind to work with.
+
+  /! **************************End Client-say*****************************
+  

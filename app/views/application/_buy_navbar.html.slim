@@ -1,0 +1,16 @@
+=form_for Search.new, url: searches_path, :html => {:class => "quick-search form-inline pull-right"} do |f|
+  .form-group
+    .input-group
+      =f.text_field :query, placeholder: _("Enter offer no."), :class => "form-control"
+      span.input-group-btn
+        =f.submit _("Show offer"), data: {disable_with: _("Please wait...")}, :class => "btn"
+
+=semantic_navigation :class => "nav navbar-nav" do |n|
+  -n.item _("Overview"), page_path("buy")
+  -n.item _("Categories"), page_path("categories1")
+  -n.item _("Our stocklist"), [:stocklist, :offers]
+  -n.item _("Our brands"), overview_brands_path
+  -n.item _("Our models"), overview_modells_path
+  -n.item _("Latest offers"), latest_searches_path
+  -n.item _("Special offers"), page_path("special_offers")
+  -n.item _("Package deals"), packages_path

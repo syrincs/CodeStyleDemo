@@ -1,0 +1,12 @@
+.brands
+  -Brand.popular.limit(3*20).sort_by(&:name).each do |brand|
+    p=link_to brand.name, "#", :class => "brand", :data => {:id => brand.id}
+
+coffeeview:
+  $("a.brand").click (e) ->
+    e.preventDefault()
+    link = $(@)
+    form = $("<form>").attr(action: <%=searches_path%>, method: "POST").hide()
+    form.append($("<input>").attr(type: "hidden", name: "authenticity_token", value: $('meta[name="csrf-token"]').attr('content')))
+    form.append($("<input>").attr(type: "hidden", name: "search[brand_id]", value: link.data("id")))
+    form.appendTo("body").submit()

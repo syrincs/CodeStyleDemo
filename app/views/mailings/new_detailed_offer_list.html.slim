@@ -1,0 +1,9 @@
+p=_("Dear {firstname} {lastname},")
+
+-@offers.each do |offer|
+  .item
+    =render "offers/email", offer: offer
+
+=render "email_signature", user: current_user
+=render "disclaimer"
+

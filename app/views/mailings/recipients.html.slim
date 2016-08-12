@@ -1,0 +1,20 @@
+-provide :page_title, @mailing.subject
+
+table.table.table-striped.table-hover
+  thead
+    tr
+      th=_("No")
+      th=_("Company")
+      th=_("Name")
+      th=_("Country")
+      th=_("Email")
+      th
+        .pull-right=_("Offers")
+      th
+        .pull-right=_("Inquiries")
+  -if @recipients.any?
+    =render "recipients"
+  -else
+    tbody
+      tr
+        td(colspan=10)=_("No matching recipients found.")

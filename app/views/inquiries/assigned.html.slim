@@ -1,0 +1,33 @@
+-provide :page_title, _("My inquiries")
+
+.panel.panel-default
+  .panel-heading Filter
+  .panel-body
+    =simple_form_for @filter, url: assigned_inquiries_path, :method => :get, :html => {:class => "form-vertical"}, :wrapper => :vertical_form do |f|
+      =f.input :id, label: _("Id")
+      =f.input :buyable_id, label: _("Item id")
+      =f.input :user, as: :string, label: _("Buyer"), input_html: {value: @filter.user ? @filter.user.fullname : ""}
+      =f.input :user_id, as: :hidden, input_html: {class: "clear"}
+      =f.input :email, label: _("Buyer Email")
+      .pull-right
+        =f.submit _("Clear"), type: "reset", class: "btn clear", name: "clear"
+      =f.submit _("Apply filters"), :class => "btn btn-primary"
+
+=semantic_navigation :class => "nav nav-tabs" do |n|
+  -n.item "Buyer waiting for my reply", assigned_inquiries_path(:filter => {:state => "waiting_reply_staff"}), :highlights_on => proc{ params[:filter][:state] == "waiting_reply_staff" }
+  -n.item "Waiting for reply from buyer", assigned_inquiries_path(:filter => {:state => "waiting_reply_buyer"}), :highlights_on => proc{ params[:filter][:state] == "waiting_reply_buyer" }
+  -n.item "Closed", assigned_inquiries_path(:filter => {:state => "closed"}), :highlights_on => proc{ params[:filter][:state] == "closed" }
+
+table.table.table-hover.table-striped
+  thead
+    tr
+      th=link_to_order _("No"), "id:desc", @filter
+      th=link_to_order _("Item"), "item", @filter
+      th=link_to_order _("Buyer"), "buyer", @filter
+      th=link_to_order _("Created"), "created:desc", @filter
+      th=link_to_order _("Last update"), "last_contact:desc", @filter
+  =render "assigned"
+
+coffeeview:
+  $ ->
+    $("#filter_user").user_autocomplete(<%=autocomplete_users_path%>, "dealer")

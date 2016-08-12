@@ -1,0 +1,15 @@
+section.action-area-mini
+  =content_tag :div, class: "#{yield :foto_class}"
+    .foto-pattern
+      ul.container.breadcrumb
+        li
+          =link_to "Home", root_path
+          span.divider 
+            | //
+        li.active
+          a href="#"
+            =request.path.split("/")[-1]
+      .container
+        h2.page-title.pull-left.page-title-margin
+          =yield :header_title
+        =yield :action_button

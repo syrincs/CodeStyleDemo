@@ -1,0 +1,50 @@
+li
+  =link_to inbox_messages_path do |n|
+    i.icon-white.icon-envelope
+    span
+      |  My messages
+
+-if staff?
+  li
+    =link_to assigned_offers_path(filter: { state: "waiting_reply_seller" }), highlights_on: [{ controller: "offers" }] do |n|
+      i.icon-white.icon-star
+      span
+        | &nbsp;
+        =_("My offers")
+
+  li
+    =link_to assigned_inquiries_path(filter: { state: "waiting_reply_staff" }), highlights_on: [{ controller: "inquiries" }] do |n|
+      i.icon-white.icon-question-sign
+      span
+        | &nbsp;
+        =_("My inquiries")
+
+-else
+  li
+    =link_to _("My offers"), [:offers, current_user] do |n|
+      i.icon-white.icon-star
+      span
+        | &nbsp;
+        =_("My offers")
+
+  li
+    =link_to _("My inquiries"), [:inquiries, current_user] do |n|
+      i.icon-white.icon-question-sign
+      span
+        | &nbsp;
+        =_("My inquiries")
+
+li 
+  =link_to searches_user_path(current_user) do |n|
+    i.icon-white.icon-search
+    span
+      | &nbsp;
+      =_("My searches")
+
+li
+  =link_to settings_user_path(current_user) do |n|
+    i.icon-white.icon-user
+    span
+      | &nbsp;
+      =_("My account")
+

@@ -1,0 +1,21 @@
+-provide :page_title, _("Branches")
+
+=will_paginate @branches, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "branches_page"
+
+table#branches.table.table-striped.table-hover
+  caption
+    h4.pull-left
+      =_("Branches")
+    .records.pull-left
+      =page_entries_info @branches if @branches
+    p.create.btn-group
+      =link_to fa_icon("plus-circle", text: _("New branch")), new_branch_path, remote: true, class: "btn btn-info"
+  thead
+    tr
+      th=_("Name")
+      th.right=_("Contacts")
+      th
+  tbody.table-partial
+    =render partial: "index", locals: { branches: @branches }
+
+=will_paginate @branches, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "branches_page"

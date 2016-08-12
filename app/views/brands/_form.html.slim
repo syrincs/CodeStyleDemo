@@ -1,0 +1,17 @@
+=simple_form_for @brand, remote: true, defaults: {label: false}, html: { class: "form-horizontal" } do |f|
+  .modal-content
+    .modal-header
+      button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+      h3 #{action_name.titleize} brand
+    .modal-body
+      -if @brand.id
+        ="Created at: #{time(@brand.created_at, false)}"
+        br 
+        ="Updated at: #{time(@brand.updated_at, false)}" 
+        br
+      br
+      =f.input :name, placeholder: _("Name"), autofocus: true
+    .modal-footer
+      .tools.btn-group
+        =f.submit _("Submit"), class: "btn btn-primary", data: { disable_with: _("Please wait...") }
+        =button_tag "Cancel", class: "btn btn-default", "data-dismiss" => "modal"

@@ -1,0 +1,134 @@
+aside.span3
+  .aside-wrap
+    =link_to latest_searches_path
+      #latest-offers
+        =image_tag "redesign2015/latest_offers_banner.png"
+    .panel-group
+      .panel.panel-primary
+        .panel-heading
+          =fa_icon "hashtag"
+          |  Search
+        .panel-body 
+          -@search = Search.new
+          =simple_form_for @search, html: { class: "form-horizontal" }, defaults: { label: false } do |f|
+            =f.association :category, collection: categories_as_padded_tree, include_blank: "Select category..."
+            =f.association :brand, collection: @search.brands, include_blank: "Select brand..."
+            =f.association :modell, collection: @search.modells, include_blank: "Select model..."
+            =f.input :format, collection: @search.formats, include_blank: "Select format..."
+            =f.input :year, collection: @search.years, include_blank: "Select age..."
+            .form-actions
+              =f.submit _("Show offers") % {count: @search.offers.count}, data: {disable_with: _("Please wait...")}, class: "btn btn-primary gradient"
+
+      .panel.panel-primary
+        .panel-heading 
+          =fa_icon "hashtag"
+          |  Our offers
+        .panel-body 
+          ul.categori-list
+            li
+              .fa.fa-folder
+              | &nbsp;
+              =link_to _("Our stocklist"), [:stocklist, :offers]
+            li
+              .fa.fa-folder
+              | &nbsp;
+              =link_to _("Our brands"), overview_brands_path
+            li
+              .fa.fa-folder
+              | &nbsp;
+              =link_to _("Our models"), overview_modells_path
+            li
+              .fa.fa-folder
+              | &nbsp;
+              =link_to _("Latest offers"), latest_searches_path
+            li
+              .fa.fa-folder
+              | &nbsp;
+              =link_to _("Special offers"), page_path("special_offers")
+            li
+              .fa.fa-folder
+              | &nbsp;
+              =link_to _("Package deals"), packages_path
+          =link_to categories_path, class: "more"
+            =fa_icon "chevron-right", text: "SHOW MORE", right: true
+
+    #accordion3.accordion.style-1
+      .panel.panel-primary
+        .panel-heading
+          =fa_icon "hashtag"
+          |  Categories
+        .panel-body 
+          ul.categori-list
+            -Category.roots.where({ name: ["Printing", "Pre-press", "Post-press"]}).each do |category|
+              li
+                .fa.fa-folder
+                | &nbsp;
+                =link_to category.name, category
+          =link_to categories_path, class: "more"
+            =fa_icon "chevron-right", text: "SHOW MORE", right: true
+      .panel.panel-primary
+        .panel-heading
+          =fa_icon "hashtag"
+          |  Popular brands
+        .panel-body 
+          ul.categori-list
+            -Brand.popular.limit(15).each do |brand|
+              li
+                .fa.fa-folder
+                | &nbsp;
+                =link_to brand.name, "#", class: "brand", data: { id: brand.id }
+          =link_to overview_brands_path, class: "more"
+            =fa_icon "chevron-right", text: "SHOW MORE", right: true
+
+      .panel.panel-primary
+        .panel-heading
+          =fa_icon "hashtag"
+          |  Popular models
+        .panel-body 
+          ul.inline.tags-wrap
+            -Modell.popular.limit(60).sort_by(&:name).each do |modell|
+              li
+                =link_to modell.name, "#", class: "modell tag-link", data: { id: modell.id }
+          =link_to overview_modells_path, class: "more"
+            =fa_icon "chevron-right", text: "SHOW MORE", right: true
+
+coffeeview:
+  $ ->
+    initialize_search_handlers(<%=update_criterias_searches_path(format: 'json')%>)
+
+    $("#search_category_id").select2
+      matcher: (term, text) ->
+        text.toUpperCase().trim().indexOf(term.toUpperCase()) == 0
+
+    $("#search_brand_id").select2
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+    $("#search_modell_id").select2
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+    $("#search_format").select2
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+    $("#search_year").select2
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+  $("a.brand").click (e) ->
+    e.preventDefault()
+    link = $(@)
+    form = $("<form>").attr(action: <%=searches_path%>, method: "POST").hide()
+    form.append($("<input>").attr(type: "hidden", name: "authenticity_token", value: $('meta[name="csrf-token"]').attr('content')))
+    form.append($("<input>").attr(type: "hidden", name: "search[brand_id]", value: link.data("id")))
+    form.appendTo("body").submit()
+
+  $("a.modell").click (e) ->
+    e.preventDefault()
+    link = $(@)
+    form = $("<form>").attr(action: <%=searches_path%>, method: "POST").hide()
+    form.append($("<input>").attr(type: "hidden", name: "authenticity_token", value: $('meta[name="csrf-token"]').attr('content')))
+    form.append($("<input>").attr(type: "hidden", name: "search[modell_id]", value: link.data("id")))
+    form.appendTo("body").submit()
+

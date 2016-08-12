@@ -1,0 +1,25 @@
+= stylesheet_link_tag "bootstrap-multiselect", media: "all"
+= javascript_include_tag "bootstrap-multiselect"
+
+h1=_("Country")
+hr
+=simple_form_for @country, html: { class: "form-horizontal edit-form" } do |f|
+  / -if @country.id
+  /   =f.input :id, as: :string, label: _("Id"), input_html: {value: @country.id, disabled: true}, required: false
+  /   =f.input :created_at, as: :string, label: _("Created"), input_html: {value: time(@country.created_at, false), disabled: true}, required: false
+  /   =f.input :updated_at, as: :string, label: _("Updated"), input_html: {value: time(@country.updated_at, false), disabled: true}, required: false
+  =f.input :name, label: false, placeholder: "enter country name..."
+  =f.input :assigned_employee_id, label: false, collection: User.staff.sort_by(&:fullname).map{ |user| [user.fullname, user.id] }, include_blank: "Assigned employee..."
+  br
+  strong Select your continents for the shown country:
+  br
+  =f.association :continents, as: :select, label: false, collection: Continent.for_select
+  br
+  .tools.btn-group
+    =f.submit _("Submit"), class: "btn btn-primary", data: { disable_with: _("Please wait...") }
+    =link_to "Cancel", countries_path, class: "btn btn-default"
+
+coffeeview:
+  $ ->
+    $('#country_continent_ids').multiselect()
+    $('#country_assigned_employee_id').select2({ width: '310' })

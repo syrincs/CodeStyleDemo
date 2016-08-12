@@ -1,0 +1,2 @@
+class NumericProperty < Property
+end

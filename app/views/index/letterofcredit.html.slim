@@ -1,0 +1,59 @@
+-provide :page_title, _("What is a Letter of Credit?")
+
+section.action-area-mini
+  .foto-service
+    .foto-pattern
+      ul.container.breadcrumb
+        li
+          a href="#"  Home
+          span.divider 
+          | //
+        li.active  Letter of credit
+      .container
+        h2.page-title.pull-left.page-title-margin
+          | our
+          small Letter of credit
+        ul.ch-second-grid
+          li.pull-right.download-button
+            .ch-second-item
+              h4
+                | show 
+                br
+                | offers
+                br
+                span.download-button-arrow
+              a.ch-second-info href="#" 
+                h4
+                  | show 
+                  br
+                  | offers
+                  br
+                  span.download-button-arrow
+.white-wrap
+  .container.grey-lines.page-content
+    .row
+
+      p
+        =_("A letter of credit is a written undertaking given by a bank on behalf of the buyer to pay the seller an agreed sum within a specified time provided the seller presents documents strictly in accordance with the terms laid down in the letter of credit. Exporting entails certain risks, such as:")
+      ul
+        li=_("economic risks (a rise in production costs, declining variations in capital flow, rising variations in currency exchange or interest rates, rises in inflation rates, etc.)")
+        li=_("political risks (labour disputes, insurrections, terrorism, war, the retraction of import and export permits, boycotts, nationalization, sanctions, etc., and natural disasters which can be put in the same category, such as environmental disasters, earthquakes, etc.)")
+        li=_("transport risks (shipwreck, loss, fire, theft, deterioration, breakage, or other material damages)")
+        li=_("commercial risks (the non-respect of contract terms, unilateral resiliation, default on payment or delivery, insolvency, bankruptcy, etc.)")
+        li=_("contractual risks (contract with a private or public sector partner, a buy-sell merchandise contract, investment contract)")
+        li=_("financial risks (credit)")
+
+      p
+        =_("All letters of credit contain these elements:")
+      ul
+        li=_("a payment undertaking given by the bank (issuing bank)")
+        li=_("on behalf of the buyer (applicant)")
+        li=_("to pay a seller (beneficiary)")
+        li=_("a given amount of money")
+        li=_("on presentation of specified documents representing the supply of goods")
+        li=_("within specific time limits")
+        li=_("these documents conforming to terms and conditions set out in the letter of credit")
+        li=_("documents to be presented at a specified place")
+
+      =image_tag "letterofcredit.gif"
+

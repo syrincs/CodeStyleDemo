@@ -1,0 +1,3 @@
+=semantic_navigation :class => "nav navbar-nav" do |n|
+  -Branch.order(:position).each do |branch|
+    -n.item branch.name, branch

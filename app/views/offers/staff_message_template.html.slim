@@ -1,0 +1,9 @@
+p=_("Dear %{name},") % {name: @offer.contact.name}
+
+p
+
+p==_("Please open <<this page>> to see the offer again and reply to my request."){ offer_url(@offer, autologin_secret: @offer.autologin_secret) }
+
+p=_("Thanks for your usual cooperation and looking forward to your earliest reply.")
+
+=render "application/email_signature", user: @message.user

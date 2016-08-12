@@ -1,0 +1,24 @@
+.row.accordion-wrap.accordion-elemenst
+  -accordion_no = 1
+  -items_per_col = (Category.roots.count / 3.0).ceil # 3-COLUMNS-ACCORDION-DESIGN
+
+  -[0,items_per_col,items_per_col*2].each do |n|
+    -accordion_id = "accordion#{accordion_no}"
+    .span4
+      /! Begin accordion
+      .accordion id="#{accordion_id}"
+        -Category.roots.order(:position).limit(items_per_col).offset(n).each_with_index do |category, index|
+          -collapse_id = "collapse1-#{index+1+n}"
+          .accordion-group
+            .accordion-heading
+              a.accordion-toggle.accordion-plus data-parent="##{accordion_id}" data-toggle="collapse" href="##{collapse_id}"
+                =link_to category.name, category
+            .accordion-body.collapse id="#{collapse_id}"
+              .accordion-inner
+                -list = category.children.order(:position).map{ |c| [c.name, c]}
+                -list = list.fill(nil, list.length...4)
+                -list.each do |data|
+                  -if data
+                    =link_to *data
+                  br
+    -accordion_no += 1

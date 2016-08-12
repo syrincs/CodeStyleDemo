@@ -1,0 +1,63 @@
+$ ->
+  $.fn.user_autocomplete = (source, style) ->
+    highlight_term = (string, term) ->
+      regex = new RegExp("(?![^&;]+;)(?!<[^<>]*)("+term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1")+")(?![^<>]*>)(?![^&;]+;)", "gi")
+      string.replace(regex, "<strong>$1</strong>")
+
+    highlight_terms = (string, terms) ->
+      terms = terms.split(" ")
+      for term in terms
+        string = highlight_term(string, term) unless string == ""
+      string
+
+    isEmptyString = (string) ->
+      !string || $.trim(string).length == 0
+
+    getItemLabel = (item) ->
+      return item.label if item.label?
+      switch style
+        when "contact"
+          "#{item.name} (#{item.email})"
+        when "dealer"
+          if isEmptyString(item.company) && isEmptyString(item.name)
+            "#{item.email} [#{item.offers_count}]"
+          else
+            "#{item.company} (#{item.name}) [#{item.offers_count}]"
+
+    @each ->
+      input = $(@)
+      input_id = input.attr("id")
+
+      fillInputs = (id, label) ->
+        $("##{input_id}_id").val(id)
+        $("##{input_id}").val(label)
+
+      input.autocomplete
+        source: source,
+        minLength: 2,
+        delay: 250,
+        search: (event) =>
+          ui = $(@).data('ui-autocomplete')
+          $.trim(ui.term).length >= ui.options.minLength
+        select: (event, ui) ->
+          switch ui.item.type
+            when "no-matches"
+              ; # noop
+            when "new-user"
+              $.getScript("/en/users/new?field_id=#{input_id}")
+            else
+              fillInputs(ui.item.id, getItemLabel(ui.item))
+          false
+        change: (event, ui) ->
+          fillInputs('', '') unless ui.item
+        response: (event, ui) ->
+          if ui.content.length is 0
+            ui.content.push(type: "no-matches", label: "No matches found")
+          ui.content.unshift(type: "new-user", label: "New user")
+
+      input.data("ui-autocomplete")._renderItem = (ul, item) ->
+        html = getItemLabel(item)
+        html = highlight_terms(html, input.val()) if item.id?
+        $el = $("<li></li>").data("item.autocomplete", item).append($("<a></a>").html(html)).appendTo(ul)
+        $el.addClass(item.type) if item.type?
+        $el

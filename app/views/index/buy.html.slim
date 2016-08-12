@@ -1,0 +1,118 @@
+-provide :page_title, _("Buy second-hand printing machinery")
+
+section.action-area-mini
+  .foto-service
+    .foto-pattern
+      ul.container.breadcrumb
+        li
+          a href="#"  Home
+          span.divider 
+            | //
+        li.active Want to buy
+      .container
+        h2.page-title.pull-left.page-title-margin
+          | Want to
+          small buy
+.white-wrap
+  .container.grey-lines.page-content
+    .row
+      .span4
+        .popular-post
+          .page-elements-title-wrap.horizontal-blue-lines.text-center
+            h3.page-elements-title.page-title-position.blue-text Search:
+            =form_for Search.new, url: searches_path, html: {class: "search-wrap"} do |f|
+              =f.text_field :query, id: "input-search", placeholder: ("search for your machine")
+              =f.submit _("Show offer"), data: {disable_with: "Please wait..."}, :class => "submit-button"
+            =link_to "Advanced Search", new_search_path, class: "btn btn-primary"
+      .span8
+        p.simple-text-14
+          strong To find matching offers
+          |  for the machine brand or model you are looking for, please click our categories, our brands, our models or use our search function.
+          |  When viewing an offer simply click on "make inquiry" and complete the form.
+          |  We are looking forward to making business with you.
+    .row
+      .page-elements-title-wrap.horizontal-blue-lines.text-center
+        h3.page-elements-title.page-title-position.blue-text Categories
+      =render "categories"
+    br
+    .row
+      .span6
+        legend
+          .pull-right=link_to "show all", overview_brands_path, class: "btn btn-primary"
+          =_("Our most popular brands")
+        =render "brands"
+      .span6
+        legend
+          .pull-right=link_to "show all", overview_modells_path, class: "btn btn-primary"
+          =_("Our most popular models")
+        =render "modells"
+
+    .row.service-descript-wrap
+      .span4.offset4.question-info
+        h2.pink-text.section-title
+          | Have any
+          span.custom-size Questions?
+        p.simple-text-12
+          strong Please feel free to contact us at any time.
+        p.blue-text.upper.font-style-26 info@roepa.com
+        p.simple-text-16 or
+        p.blue-text.font-style-26 +33 389-70930-0
+
+    .row.prepend-top
+      .col-md-20
+        legend
+          .pull-right=link_to "show all", page_path("categories1"), class: "btn btn-sm btn-link"
+          =_("Our offers by category")
+        =render "categories"
+      .col-md-20
+        legend Individual search
+        -@search = Search.new
+        =simple_form_for @search, html: {class: "form-horizontal"} do |f|
+          =f.association :category, label: _("Category"), collection: categories_as_padded_tree, include_blank: _("- all -")
+          =f.association :brand, label: _("Brand"), collection: @search.brands, include_blank: _("- all -")
+          =f.association :modell, label: _("Model"), collection: @search.modells, include_blank: _("- all -")
+          =f.input :format, label: _("Format"), collection: @search.formats, include_blank: _("- all -")
+          =f.input :year, label: _("Age"), collection: @search.years, include_blank: _("- all -")
+          .form-actions
+            =f.submit _("Show offers") % {count: @search.offers.count}, data: {disable_with: _("Please wait...")}, class: "btn btn-default"
+        coffeeview:
+          $ ->
+            initialize_search_handlers(<%=update_criterias_searches_path(format: 'json')%>)
+
+    .row.prepend-top
+      .col-md-20
+        legend
+          .pull-right=link_to "show all", overview_brands_path, class: "btn btn-sm btn-link"
+          =_("Our most popular brands")
+        =render "brands"
+      .col-md-20
+        legend
+          .pull-right=link_to "show all", overview_modells_path, class: "btn btn-sm btn-link"
+          =_("Our most popular models")
+        =render "modells"
+
+    #latest_offers
+      h2=link_to _("Please click here to see all offers updated within the last 24 hours."), latest_searches_path
+
+
+coffeeview:
+  $ ->
+    $("#search_category_id").select2
+      matcher: (term, text) ->
+        text.toUpperCase().trim().indexOf(term.toUpperCase()) == 0
+
+    $("#search_brand_id").select2
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+    $("#search_modell_id").select2
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+    $("#search_format").select2
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+    $("#search_year").select2
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0

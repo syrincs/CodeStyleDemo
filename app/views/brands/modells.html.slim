@@ -1,0 +1,46 @@
+-provide :page_title, _("Models of %{brand}") % {brand: @brand.name}
+
+=link_to fa_icon("chevron-left", text: "Go Back To Brands"), brands_path, class: "btn btn-default"
+br
+br
+
+=will_paginate @brand_modells, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "brand_modells_page"
+
+table#brand_modells.table.table-striped.table-hover
+  caption
+    h4.pull-left
+      ="Models of #{@brand.name}"
+    .records
+      =page_entries_info @brand_modells if @brand_modells
+    br
+    form
+      =text_field_tag "filter", @filter, class: "form-control", placeholder: "Filter by name..."
+    .btn-group.pull-right
+      =link_to fa_icon("plus-circle", text: "New model"), new_modell_path(modell: {brand_id: @brand.id}), class: "btn btn-info", remote: true
+  thead
+    tr
+      th=_("Name")
+      th=_("Category")
+      th=_("Model group")
+      th.right=_("Offers")
+      th
+  tbody.table-partial
+    =render partial: "modells", locals: { brand_modells: @brand_modells }
+
+=will_paginate @brand_modells, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "brand_modells_page"
+
+coffeeview:
+  $ ->
+    $("#filter").on "input", (e) ->
+      input = $(@)
+      idleWait 250, ->
+        $.ajax
+          dataType: "html"
+          url: <%=modells_brand_path(@brand, remote: true)%>
+          data:
+            filter: input.val()
+          success: (data) ->
+            table = $("table#brand_modells")
+            table.find("tbody, tfoot").remove()
+            table.append(data)
+            fullTableRowClickable()

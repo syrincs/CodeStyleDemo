@@ -1,0 +1,90 @@
+-provide :page_title, _("Incoterms 2000")
+-provide :header_title, _("Incoterms 2000")
+-provide :foto_class, "foto-about"
+-provide :header_area
+  =render "layouts/big_header"
+
+.container.page-content
+  .row.span8.offset1
+
+    h4
+      strong=_("Incoterms are used for determining the costs and risks between buyers and sellers in the international trade.")
+    br
+    p=_("Incoterms define the rights and obligations of the seller and the buyer regarding supply and transport documents, the risk transition between salesman and buyer, as well as the cost division between salesmen and buyers.")
+
+    p=_("Incoterms are valid only if they were expressly contractually agreed upon and in the sales contract or eg. in offers, general sales conditions, orders, order confirmations, etc. mentioned or are held in a separate declaration/agreement.")
+    br
+    br
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th=_("Incoterms")
+          th=_("Description")
+          th=_("Place of delivery")
+      tbody
+        tr
+          td
+            strong EXW
+          td=_("Ex works")
+          td=_("Factory of the salesman")
+        tr
+          td
+            strong FCA
+          td=_("Free carrier")
+          td=_("Place of the transfer to the carrier")
+        tr
+          td
+            strong FAS
+          td=_("Free alongside ship")
+          td=_("Alongside sea-going vessel in shipping port")
+        tr
+          td
+            strong FOB
+          td=_("Free on board")
+          td=_("Sea-going vessel in shipping port")
+        tr
+          td
+            strong CFR
+          td=_("Cost and Freight")
+          td=_("Sea-going vessel in shipping port")
+        tr
+          td
+            strong CIF
+          td=_("Cost, Insurance and Freight")
+          td=_("Sea-going vessel in shipping port")
+        tr
+          td
+            strong CPT
+          td=_("Carriage paid to")
+          td=_("Place of transfer to the first carrier")
+        tr
+          td
+            strong CIP
+          td=_("Carriage and insurance paid to")
+          td=_("Place of transfer to the first carrier")
+        tr
+          td
+            strong DAF
+          td=_("Delivered at frontier")
+          td=_("Destination at the border")
+        tr
+          td
+            strong DES
+          td=_("Delivered ex ship")
+          td=_("Vessel in port of arrival")
+        tr
+          td
+            strong DEQ
+          td=_("Deliverd ex quay (duty paid)")
+          td=_("Dock of the port of arrival")
+        tr
+          td
+            strong DDU
+          td=_("Delivered duty unpaid")
+          td=_("Destination")
+        tr
+          td
+            strong DPP
+          td=_("Delivered duty paid")
+          td=_("Destination")
+

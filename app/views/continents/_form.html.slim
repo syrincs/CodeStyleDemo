@@ -1,0 +1,26 @@
+= stylesheet_link_tag "bootstrap-multiselect", media: "all"
+= javascript_include_tag "bootstrap-multiselect"
+
+h1=_("Continent")
+hr
+
+=simple_form_for @continent, html: { class: "form-horizontal edit-form" } do |f|
+  / -if @continent.id
+  /   =f.input :id, as: :string, label: _("Id"), input_html: {value: @continent.id, disabled: true}, required: false
+  /   =f.input :created_at, as: :string, label: _("Created"), input_html: {value: time(@continent.created_at, false), disabled: true}, required: false
+  /   =f.input :updated_at, as: :string, label: _("Updated"), input_html: {value: time(@continent.updated_at, false), disabled: true}, required: false
+  =f.input :name, label: false, placeholder: "enter continent name..."
+  br
+  br
+  strong Select your associated countries for this continent:
+  br
+  =f.association :countries, as: :select, label: false, alt: false, collection: Country.for_select
+  hr
+
+  .tools.btn-group
+    =f.submit _("Submit"), class: "btn btn-primary", data: { disable_with: _("Please wait...") }
+    =link_to "Cancel", continents_path, class: "btn btn-default"
+
+coffeeview:
+  $ ->
+    $('#continent_country_ids').multiselect()

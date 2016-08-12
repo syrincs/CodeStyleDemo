@@ -1,0 +1,124 @@
+-provide :page_title, _("ROEPA %{branch}") % {branch: @branch.name}
+-provide :header_title ,"Get in touch"
+-provide :header_area
+  section.action-area-mini
+    .foto-pattern
+      ul.container.breadcrumb
+        li
+          =link_to "Home", root_path
+          span.divider
+            | //
+        li.active Contact
+  #map-canvas style="height:350px;" 
+
+-@branches = Branch.order(:position)
+
+section.container.contact-wrap
+  .row.tab-elements
+    .span4
+      .get-in-touch
+        h2.section-title
+          | Get in
+          span.blue-text Touch
+      = simple_form_for @guest_message, url: send_mail_branch_path, method: :post, html: { id: "message_form", class: "border-double messege-form text-center" }, defaults: { label: false, error: false } do |f|
+        -if @guest_message.errors.any?
+          #error_explanation
+            h2
+              ="#{pluralize(@guest_message.errors.count, "error")} prohibited this message from being sent:"
+            ul
+              -@guest_message.errors.full_messages.each do |msg|
+                li
+                  =msg
+        = f.input :name, input_html: { class: "input-style" }, placeholder: "Name:"
+        = f.input :subject, input_html: { class: "input-style" }, placeholder: "Subject:"
+        = f.input :email, input_html: { class: "input-style" }, placeholder: "Email:"
+        = f.input :phone, input_html: { class: "input-style" }, placeholder: "Phone:"
+        = f.input :content, as: :text, input_html: { rows: 5, class: "input-style" }, placeholder: "Message:"
+        = f.submit "Send", class: "btn btn-info btn-large", value: "Send Email"
+      .item-blog-style.block-height-1.block-width-1
+        .blog-styly-block
+          =image_tag "redesign2015/building_small.jpg", class: "blog-image-wrap"
+          .block-content.clearfix
+            h3.page-elements-title.text-right
+              = Time.now.strftime("%B %d")
+              br
+              = Time.now.strftime("%Y")
+            h2.font-style-20 Partner To The Graphic Arts Industry.
+            .clearfix
+            p.simple-text-12 Because since more than an half century ROEPA is the reliable partner to the graphic arts industry worldwide.
+          a.link-icon-arrow href="#" 
+    .span8
+      ul#myTab.nav.nav-tabs
+        -taborder=1
+        -@branches.each do |branch|
+          =content_tag :li, class: ("active" if taborder==1)
+            =link_to branch.name, "#tab#{taborder}", "data-toggle" => "tab"
+          -taborder+=1
+      .tab-content
+        -taborder_country=1
+        -@branches.each do |branch|
+          =content_tag :div, id: "tab#{taborder_country}", class: "tab-pane %{active}" % { active: ("active" if taborder_country==1) } do
+            p.simple-text-12
+              =simple_format(h(branch.description))
+            br
+            .tabbable.tabs-left
+              ul#myTab-left.nav.nav-tabs
+                -taborder=1
+                -branch.contacts.order(:position).each do |contact|
+                  =content_tag :li, class: ("active" if taborder==1)
+                    a data-toggle="tab" href="#tab#{taborder}-left" =contact.name
+                  -taborder+=1
+              .tab-content
+                -taborder=1
+                -branch.contacts.order(:position).each do |contact|
+                  =content_tag :div, id: "tab#{taborder}-left", class: "tab-pane %{active}" % { active: ("active" if taborder==1) } do
+                    .get-in-touch
+                      .client-photo-wrap.pull-left
+                        figure.client-photo                          
+                          img src="http://placehold.it/250x300"
+                      address
+                        -if contact.phone.present?
+                          span
+                            | #{_("Phone:")} #{contact.phone}
+                        -if contact.mobile.present?
+                          span
+                            | #{_("Mobile:")} #{contact.mobile}
+                        -if contact.fax.present?
+                          span
+                            | #{_("Fax:")} #{contact.fax}
+                        -if contact.email.present?
+                          span
+                            | #{_("Email:")} #{mail_to(contact.email, nil, encode: "javascript")}
+                      address
+                        span.span4.widget-news-address 
+                          =branch.address
+                  -taborder+=1
+          -taborder_country+=1
+
+coffeeview:
+  $ ->
+    [lat, lng] = <%=@branches.first.location%>.split(" ")
+
+    map = new (google.maps.Map)(document.getElementById('map-canvas'),
+      zoom: 2
+      scrollwheel: false
+      center: new (google.maps.LatLng)(lat, lng)
+      mapTypeId: google.maps.MapTypeId.ROADMAP)
+    infowindow = new (google.maps.InfoWindow)
+
+    i = 0
+    <% @branches.each do |branch| %>
+    [lat, lng] = <%=branch.location%>.split(" ")
+    marker = new (google.maps.Marker)(
+      position: new (google.maps.LatLng)(lat, lng)
+      map: map)
+    google.maps.event.addListener marker, 'click', do (marker, i) ->
+      ->
+        infowindow.setContent <%=nl2br(h(branch.address))%>
+        infowindow.open map, marker
+        return
+    i++
+    <% end %>
+
+    google.maps.event.trigger(map,"resize");     
+

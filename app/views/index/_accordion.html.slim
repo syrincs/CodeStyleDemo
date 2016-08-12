@@ -1,0 +1,29 @@
+-max_depth = cat_children.subtree.select(&:is_childless?).map(&:depth).max
+#accordion3.accordion.style-1
+  .accordion-group
+    =content_tag :div, class: "accordion-heading #{color_class if defined?(color_class)}"
+      a.accordion-toggle.accordion-plus data-toggle="collapse" href="#collapse#{cat_children.id}"
+        =link_to cat_children do |n|
+          =cat_children.name
+          | ...
+    =content_tag :div, id: "collapse#{cat_children.id}", class: "accordion-body collapse"
+      -if cat_children.has_children?
+        .accordion-inner
+          ul.categori-list
+            -cat_children.children.order(:position).each do |sub_children|
+              =link_to sub_children do |n|
+                .fa.fa-chevron-circle-right
+                | &nbsp;
+                =sub_children.name
+                -unless sub_children.has_children?
+                  =" (#{sub_children.offers.approved.count})"
+              br
+      -else
+        .accordion-inner
+          ul.categori-list
+            -cat_children.offers.approved.each do |offer|
+              =link_to offer do |n|
+                .fa.fa-chevron-circle-right
+                | &nbsp;
+                =("#{offer.year} #{offer.modell.brand.name} #{offer.modell.name}").truncate(40)                
+              br

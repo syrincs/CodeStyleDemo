@@ -1,0 +1,27 @@
+=yield :javascript_includes if content_for? :javascript_includes
+/![if lt IE 8]
+  /!<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p
+
+/! **************************Begin Header*****************************
+#login_container.modal.hide.fade aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" 
+#alert-div style="position: fixed; top: 0; right: 0; z-index: 9999"
+  =render "flash", flash: flash
+
+.main-nav-wrap
+  nav.main-navbar.container
+    .logo.pull-left
+      = link_to root_path
+        = image_tag("logo2015.png", alt: _("ROEPA - Partner to the graphic arts industry"), class: "logo")
+      br
+      h7.page-elements-title Partner to the graphic arts industry worldwide
+
+    =render "main_menu"
+
+    #topsearch.pull-right
+      =form_for Search.new, url: searches_path do |f|
+        =f.text_field :query, id: "input-topsearch", placeholder: ("enter reference no...")
+        =f.submit _("Show offer"), data: { disable_with: "Please wait..." }, class: "submit-button"
+
+/! **************************End Header*****************************
+
+=render "loading_animation"

@@ -1,0 +1,38 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      a.close(data-dismiss="modal") ×
+      h4.modal-title=_("Offer already sold")
+
+    .modal-body
+      p=_("Sorry - this offer has already been sold on %{date}.") % {date: l(@inquiry_by_user.buyable.deleted_at)}
+
+      -suggestions = @inquiry_by_user.buyable.similar
+      -if suggestions.any?
+        p=_("Here are some similar offers you might be interested in:")
+
+        table.table.table-striped.table-hover.table-condensed
+          thead
+            tr
+              th=_("Offer")
+              th=_("Brand")
+              th=_("Model")
+              th=_("Age")
+              th=_("Location")
+              th
+                .pull-right=_("Price")
+          tbody
+            -suggestions.each do |offer|
+              tr
+                td=link_to offer.id, offer, :class => "clickable"
+                td=offer.brand.name
+                td=offer.modell.name
+                td=offer.year
+                td=offer.location.name
+                td
+                  .pull-right=price(offer)
+
+        p=_("For more information about an offer please click on the offer no. of your interest.")
+
+
+    .modal-footer

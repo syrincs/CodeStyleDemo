@@ -1,0 +1,35 @@
+-provide :page_title, _("Models of %{modell_group}") % {:modell_group => @modell_group.name}
+
+.panel.panel-default
+  .panel-heading=_("Tools")
+  .list-group
+    =link_to _("Add new model"), new_modell_path(:modell => {:modell_group_id => @modell_group.id}), :class => "list-group-item"
+
+.panel.panel-default
+  .panel-heading Filter
+  .panel-body
+    form
+      =text_field_tag "filter", @filter, :class => "form-control", :placeholder => "Name"
+
+table.table.table-striped.table-hover.brands
+  thead
+    tr
+      th=_("Name")
+      th=_("Category")
+      th.right=_("Offers")
+  =render "modells"
+
+coffeeview:
+  $ ->
+    $("#filter").on "input", (e) ->
+      input = $(@)
+      idleWait 250, ->
+        $.ajax
+          dataType: "html"
+          url: <%=modells_modell_group_path(@modell_group, :remote => true)%>
+          data:
+            filter: input.val()
+          success: (data) ->
+            table = $("table.brands")
+            table.find("tbody, tfoot").remove()
+            table.append(data)

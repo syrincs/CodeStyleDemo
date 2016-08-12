@@ -1,0 +1,126 @@
+=simple_form_for @form, html: {multipart: true, class: "offer plain form-horizontal"} do |f|
+  =field_set_tag _("Basics") do
+    -if @offer.id
+      =f.input :id, as: :string, label: _("Id"), input_html: {value: @offer.id, disabled: true}, required: false
+      =f.input :created_at, as: :string, label: _("Created"), input_html: {value: time(@offer.created_at, false), disabled: true}, required: false
+      =f.input :updated_at, as: :string, label: _("Updated"), input_html: {value: time(@offer.confirmed_at, false), disabled: true}, required: false
+      =f.input :creator, as: :string, label: _("Creator"), input_html: {value: @offer.creator.fullname, disabled: true}, required: false
+    -if staff?
+      =f.input :user, as: :string, label: _("Seller"), input_html: {value: @offer.user.fullname, id: "offer_user"}, required: false
+      =f.input :user_id, as: :hidden
+      =f.input :brand, label: _("Brand"), collection: Brand.for_select, selected: @offer.brand.id
+      =f.input :modell_id, label: _("Model"), collection: @offer.brand.modells.for_select
+    -else
+      =f.input :brand, as: :string, label: _("Brand"), input_html: {value: @offer.brand.name, disabled: true}, required: false
+      =f.input :modell, as: :string, label: _("Model"), input_html: {value: @offer.modell.name, disabled: true}, required: false
+      =f.input :modell_id, as: :hidden
+    =f.input :category, as: :string, label: _("Category"), input_html: {value: (@offer.category.ancestors.to_a << @offer.category).map(&:name)*" » ", disabled: true}, required: false
+
+  =field_set_tag _("Model specific details") do
+    -@form.modell_properties.each do |id, value|
+      =f.input :"modell_properties[#{id}]", label: Property.find(id).name, :disabled => cannot?(:update, Modell), :input_html => {:value => value}
+
+  =field_set_tag "Offer" do
+    =f.input :user_reference, label: _("Your reference")
+    =f.input :location_id, label: _("Location"), as: :grouped_select, collection: [["Continent", Continent.for_select.map{ |v| [v.name, v.id] }], ["Country", Country.for_select.map{ |v| [v.name, v.id] }]], :group_method => :last
+    =f.input :location_type, as: :hidden
+    =f.input :in_production, as: :select, label: _("In production")
+    =f.input :test_possible, as: :select, label: _("Test possible")
+    =f.input :complete_and_working, as: :select, label: _("Complete and working")
+    =f.input :user_price, as: :string, label: _("Lowest possible price")
+    =f.input :currency_id, collection: Currency.for_select, label: _("Currency")
+    =f.input :incoterm_id, collection: Incoterm.for_select, label: _("Incoterms")
+    -if admin? || manager?
+      =f.input :revenue_percentage, as: :string, label: _("Revenue percentage")
+    =f.input :year, as: :select, label: _("Age"), collection: 1950..Date.today.year
+    =f.input :year_remarks, label: _("Age remarks")
+    =f.input :availability, label: _("Availability")
+    =f.input :condition, as: :select, label: _("Condition"), collection: ["New", "Like new", "Very good", "Good", "Normal", "Poor"]
+    =f.input :cylinders_condition, as: :select, label: _("Condition of cylinders"), collection: ["Damage free", "Professionally repaired", "Small cracks", "Need repair"]
+    =f.input :serial_no, label: _("Serial number")
+    =f.input :machine_no, label: _("Machine number")
+    -@form.offer_properties.each do |id, value|
+      =f.input :"offer_properties[#{id}]", label: Property.find(id).name, input_html: {:value => value}
+    =f.input :descriptions, :label => _("Description templates"), :input_html => {:type => "hidden", :value => @form.descriptions*"|"}
+    =f.input :description, as: :text, label: _("Free description"), input_html: {rows: 5}
+
+  -unless @offer.new_record?
+    =field_set_tag _("Pictures") do
+      .form-group
+        .col-md-40
+          .images.sortable.clearfix=render "form_images", offer: @offer
+          =link_to _("Add pictures"), new_offer_image_path(@offer), class: "btn btn-default", :remote => true
+    =field_set_tag "Videos" do
+      .form-group
+        .col-md-40
+          .videos.sortable.clearfix=render "form_videos", offer: @offer
+          =link_to _("Add videos"), new_offer_video_path(@offer), class: "btn btn-default", :remote => true
+  -if staff?
+    =field_set_tag _("Admin data") do
+      =f.input :remarks, as: :text, label: _("Remarks"), input_html: {rows: 5}
+      -if admin?
+        =f.input :approved, as: :boolean, label: _("Approved")
+      -if admin? || manager?
+        =f.input :special, as: :boolean, label: _("Special offer")
+        =f.input :package_only, as: :boolean, label: _("As package deal only")
+        =f.input :hide_images, as: :boolean, label: _("Hide images")
+  .form-actions
+    =hidden_field_tag "return_to", params[:return_to]
+    ='f.submit _("Submit"), class: "btn btn-default", data: {disable_with: _("Please wait...")}
+    -unless @offer.new_record?
+      -if @offer.deleted?
+        -if can?(:resurrect, @offer)
+          ='link_to _("resurrect"), [:resurrect, @offer], method: :put, data: {confirm: _("Are you sure?")}, class: "btn btn-success"
+      -else
+        -if can?(:destroy, @offer)
+          ='link_to _("delete"), @offer, method: :delete, data: {confirm: _("Are you sure?")}, class: "btn btn-danger"
+
+-unless @offer.new_record?
+  p='link_to _("show offer"), @offer
+  -if can?(:inquiries, @offer)
+    p='link_to _("inquiries (%{active} / %{total})") % {active: @offer.open_inquiries_count, total: @offer.inquiries_count}, [:inquiries, @offer]
+  -if staff?
+    p='link_to _("show seller"), @offer.user
+    p='link_to _("all offers of seller (%{total})") % {total: @offer.user.offers_count}, [:offers, @offer.user]
+    p='link_to *new_inquiry_link(@offer)
+  -if can?(:create, Mailing)
+    p='link_to _("send as bulk mailing"), new_mailing_path(offer_id: @offer.id)
+  -if can?(:create, OnetimeMailing)
+    p='link_to _("send by email"), new_onetime_mailing_path(offer_id: @offer.id), :remote => true
+  -if can?(:seller_message, @offer)
+    p=link_to _("Contact ROEPA staff"), [:seller_message, @offer], :remote => true
+  -if can?(:staff_message, @offer)
+    p=link_to _("Contact seller"), [:staff_message, @offer], :remote => true
+  -if can?(:staff_seller_message, @offer)
+    p=link_to _("Write message as seller"), [:staff_seller_message, @offer], :remote => true
+  br
+  =render "messages", messages: @offer.messages
+
+-if staff?
+  coffeeview:
+    $ ->
+      $("#offer_user").user_autocomplete(<%=autocomplete_users_path%>, "dealer")
+
+      $("#offer_brand").change ->
+        $.getJSON "/brands/#{$(@).val()}/modells", (result) ->
+          $('#offer_modell_id').populateFromArray(result)
+        $('#offer_modell_fields').remove()
+
+      $("#offer_modell_id").change ->
+        $('#offer_modell_fields').remove()
+
+coffeeview:
+  $ ->
+    $("#offer_descriptions").select2
+      tags: <%=@offer.category.descriptions.order(:text).pluck(:text)%>
+      separator: "|"
+      createSearchChoice: -> null
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+    $("#offer_descriptions").select2("container").find("ul.select2-choices").sortable
+      containment: "parent"
+      start: -> $("#offer_descriptions").select2("onSortStart")
+      update: -> $("#offer_descriptions").select2("onSortEnd")
+
+    $("#offer_location_id").select2()

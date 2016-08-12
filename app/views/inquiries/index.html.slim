@@ -1,0 +1,68 @@
+-provide :page_title, _("Inquiries")
+
+=will_paginate @inquiries, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "inquiries_page"
+
+=render "menu"
+
+table.table.table-striped.table-hover
+  caption
+    h4.pull-left =_("Inquiries")
+    p.info.pull-left
+      =page_entries_info @inquiries
+
+    ul.nav.nav-pills
+      li.dropdown
+        =button_tag fa_icon("chevron-down", text: "search filters", right: true), class: "btn btn-primary dropdown-toggle"
+        ul.dropdown-menu.dropdown-form
+          li
+            =simple_form_for @filter, url: inquiries_path, method: :get, html: { class: "form-vertical" }, defaults: { label: false }, wrapper: :vertical_form do |f|
+              =f.input :id, placeholder: _("Id")
+              =f.input :buyable_id, placeholder: _("Item id")
+              =f.input :user, as: :string,  placeholder: _("Buyer"), input_html: { value: @filter.user ? @filter.user.fullname : "" }
+              =f.input :user_id, as: :hidden, input_html: {class: "clear"}
+              =f.input :email, placeholder: _("Buyer Email")
+              =f.input :assigned_employee, as: :string, placeholder: _("Sales contact"), input_html: { value: @filter.assigned_employee ? @filter.assigned_employee.fullname : "" }
+              =f.input :assigned_employee_id, as: :hidden, input_html: { class: "clear" }
+              =f.input :state, collection: Inquiry::STATES.map{ |state| [inquiry_state(state), state] }, include_blank: "Select a status..."
+              =f.hidden_field :shown_items, value: params[:filter].present? ? params[:filter][:shown_items] : "25" 
+              
+              .btn-group
+                =f.submit "Apply", class: "btn btn-primary"
+                =f.submit _("Clear"), type: "reset", class: "btn clear", name: "clear"
+      
+      .select-wrap.pull-right
+        select#shop-select name="shop-select" tabindex="1"
+          option value=""
+          option value="25"  Show 25 items per page
+          option value="50"  Show 50 items per page
+          option value="75"  Show 75 items per page
+          option value="100"  Show 100 items per page
+
+  thead
+    tr
+      th=link_to_order _("No"), "id:desc", @filter
+      th=link_to_order _("Buyer"), "buyer", @filter
+      th=link_to_order _("Item"), "item", @filter
+      th=link_to_order _("Sales contact"), "assigned_employee", @filter
+      th=link_to_order _("Last update"), "last_contact:desc", @filter
+      th
+  =render "index"
+
+=will_paginate @inquiries, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "inquiries_page"
+
+
+coffeeview:
+  $ ->
+    $("#filter_user").user_autocomplete(<%=autocomplete_users_path%>, "dealer")
+    $("#filter_assigned_employee").user_autocomplete(<%=autocomplete_users_path%>, "contact")
+
+    if $('#filter_shown_items').val()
+      $('#shop-select').val($('#filter_shown_items').val())
+    else
+      $('#shop-select').val(25)
+
+    $('#shop-select').change ->
+      selectVal = $('#shop-select :selected').val()
+      $('#filter_shown_items').val(selectVal)
+      $('#new_filter').submit()
+      return

@@ -1,0 +1,37 @@
+-provide :page_title, _("Incoterms")
+
+=will_paginate @incoterms, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "incoterms_page"
+
+table.table.table-hover.table-striped
+  caption
+    h4.pull-left
+      =_("Incoterms")
+    p.create.btn-group
+      =link_to fa_icon("plus-circle", text: _("New incoterm")), new_incoterm_path, class: "btn btn-info"
+    form.search accept-charset="UTF-8" action="#" method="get" 
+      p.info.pull-left
+        =page_entries_info @incotermns if @incoterms
+      /input name="continents[search][text]" placeholder="Search" type="text"
+
+  thead
+    tr
+      th=_("Code")
+      th=_("Name")
+      th=_("Offers")
+      th
+  tbody
+    -@incoterms.order(:code).each do |incoterm|
+      tr
+        td
+          =incoterm.code
+        td
+          =incoterm.name
+        td
+          .anchor
+            =number_with_delimiter incoterm.offers.count
+        td
+          .btn-group
+            =link_to fa_icon("pencil"), [:edit, incoterm], class: "btn btn-primary default-action"
+            =link_to fa_icon("trash-o"), incoterm, method: :delete, data: {confirm: _("Are you sure?")}, class: "btn btn-primary"
+
+=will_paginate @incoterms, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "incoterms_page"

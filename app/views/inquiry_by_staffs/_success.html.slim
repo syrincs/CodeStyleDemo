@@ -1,0 +1,11 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      a.close(data-dismiss="modal") ×
+      h4.modal-title=_("Prospect added")
+
+    .modal-body
+      p=_("The inquiry for %{name} has been created.") % {:name => buyable(@inquiry_by_staff.buyable)}
+      p==_("<<Click here>> to see the status and details of the inquiry."){ @inquiry_by_staff.inquiry }
+
+    .modal-footer

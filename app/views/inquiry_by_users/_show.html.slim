@@ -1,0 +1,16 @@
+.modal-dialog
+  .modal-content
+    =simple_form_for @inquiry_by_user, url: inquiry_by_user_path, html: {class: "form-vertical"}, wrapper: :vertical_form, remote: true do |f|
+      =f.input :buyable_id, as: :hidden
+      =f.input :buyable_type, as: :hidden
+      .modal-header
+        a.close(data-dismiss="modal") ×
+        h4.modal-title=_("New quote request")
+
+      .modal-body
+        p=_("Thank you for your interest in %{name}.") % {name: buyable(@inquiry_by_user.buyable)}
+        p=_("In case of any questions or remarks, please fill in the form below. Otherwise just leave it blank.")
+        =f.input :message, as: :text, label: false, placeholder: _("Questions/ remarks"), autofocus: true, input_html: {class: "message"}
+
+      .modal-footer
+        =f.submit _("Submit quote request"), class: "btn btn-primary", data: {disable_with: _("Please wait...")}

@@ -1,0 +1,19 @@
+-provide :page_title, _("Special offers")
+
+.white-wrap.header-margin
+  section.container
+    =render "layouts/sidebar"
+
+    .row.span9
+      ul.breadcrumb.breadcrumb-category
+        li
+          =link_to "Home", root_path
+          span.divider
+            | / 
+        li.active
+          =link_to _("Special offers"), page_path("special_offers")
+      br
+
+      =render "searches/search_input"
+
+      =render "categories/category_grid"

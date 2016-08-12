@@ -1,0 +1,12 @@
+meta(charset="utf-8")
+-if content_for?(:meta_description)
+  meta(name="description" content=content_for(:meta_description))
+title=content_for(:page_title)
+link(rel="icon" href=image_path('favicon.ico').html_safe)
+link(rel="shortcut icon" href=image_path('favicon.ico').html_safe)
+-I18n.available_locales.each do |locale|
+  link(rel="alternate" hreflang=locale href=url_for(locale: locale, only_path: false).html_safe)
+=csrf_meta_tags
+-if Rails.env.production? || Rails.env.staging?
+  =render "google_analytics"
+

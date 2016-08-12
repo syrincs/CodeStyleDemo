@@ -1,0 +1,11 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      a.close(data-dismiss="modal") ×
+      h4.modal-title=_("Inquiry pending")
+
+    .modal-body
+      p=_("You already submitted an inquiry for this item on %{date}.") % {date: l(@pending_inquiry.created_at)}
+      p==_("Please <<click here>> to see the status and details of your inquiry."){ @pending_inquiry }
+
+    .modal-footer

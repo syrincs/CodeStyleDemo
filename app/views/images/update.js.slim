@@ -1,0 +1,8 @@
+-if @success
+  |
+    $("#modal").modal("hide")
+    $(".images").html("#{escape_javascript(render "offers/form_images", offer: @image.offer)}");
+-else
+  |
+    $("#modal").html("#{escape_javascript(render "form")}");
+

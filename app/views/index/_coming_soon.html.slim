@@ -1,0 +1,36 @@
+/!-provide :page_title, _("Events")
+/! **************************Begin Counters*****************************
+.white-wrap.horizontal-blue-lines.counters-wrap
+  section.container.text-center
+    h2.counters-title coming soon
+    h3.font-style-24 We are under construction and almost ready!
+    .counters.clearfix
+      .timer-wrap
+        .timer-bg
+        span.digits
+        input.knob.day data-bgcolor="#e5f5fe" data-displayinput="false" data-fgcolor="#7ccbfc" data-height="200" data-max="100" data-min="0" data-thickness=".11" data-width="200"
+        .digits-label days
+      .timer-wrap
+        .timer-bg
+        span.digits
+        input.knob.hour data-bgcolor="#e5f5fe" data-displayinput="false" data-fgcolor="#7ccbfc" data-height="200" data-max="24" data-min="0" data-thickness=".11" data-width="200"
+        .digits-label hours
+      .timer-wrap
+        .timer-bg
+        span.digits
+        input.knob.minute data-bgcolor="#e5f5fe" data-displayinput="false" data-fgcolor="#7ccbfc" data-height="200" data-max="60" data-min="0" data-thickness=".11" data-width="200"
+        .digits-label minutes
+      .timer-wrap
+        .timer-bg
+        span.digits
+        input.knob.second data-bgcolor="#e5f5fe" data-displayinput="false" data-fgcolor="#7ccbfc" data-height="200" data-max="60" data-min="0" data-thickness=".11" data-width="200"
+        .digits-label seconds
+    p.simple-text-14 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed tristique massa. Aenean iaculis diam nec ligula ullamcorper eu tempus dolor ullamcorper. Morbi in nisi tincidunt neque gravida facilisis.  Pellentesque mattis nisl eget neque scelerisque adipiscing. Vestibulum euismod commodo odio sit amet congue. Donec ut sem vel mauris sodales egestas. Nulla eget lorem vitae diam ullamcorper tincidunt ut vel est.
+    span.separation
+/! **************************End Counters*****************************
+
+coffeeview:
+  $ -> 
+    dateOfBeginning = 'Jan 1, 2016'
+    dateOfEnd = 'Jun 1, 2016'
+    countDown dateOfBeginning, dateOfEnd

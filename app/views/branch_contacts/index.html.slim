@@ -1,0 +1,24 @@
+-provide :page_title, _("Branch contacts")
+
+.modal-content
+  .modal-header
+    button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+    h3 #{action_name.titleize} branch contacts
+  .modal-body
+    table#branches.table.table-striped.table-hover
+      caption
+        h4.pull-left
+          =_("Branch contacts")
+        p.create.btn-group
+          =link_to fa_icon("plus-circle", text: _("New contact")), [:new, @branch, :branch_contact], remote: true, class: "btn btn-info"
+    table.table.table-hover.table-striped
+      thead
+        tr
+          th=_("Name")
+          th=_("Email")
+          th
+      tbody.modal-table-partial
+        =render partial: "index", locals: { branch_contacts: @branch_contacts }
+  .modal-footer
+    .btn-group
+      =link_to "Dismiss", branches_path, class: "btn btn-default", data: { dismiss: "modal" }, remote: true

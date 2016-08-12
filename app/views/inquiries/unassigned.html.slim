@@ -1,0 +1,14 @@
+-provide :page_title, _("Inquiries")
+
+=render "menu"
+
+table.table.table-striped.table-hover
+  thead
+    tr
+      th=_("No")
+      th=_("Item")
+      th=_("Buyer")
+      th=_("Seller")
+      th=_("Last update")
+      th
+  =render "unassigned"

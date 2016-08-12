@@ -1,0 +1,9 @@
+p=_("Dear {firstname} {lastname},")
+
+p=_("thank you for your interest in our %{item}.") % {item: buyable(@inquiry_by_staff.buyable)}
+
+p=_("I'll check the availability and latest information of this offer with our partner and contact you again soonest.")
+
+p==_('For any further correspondence please <<click here>>.'){ "{subject_url}" }
+
+=render "email_signature", user: current_user

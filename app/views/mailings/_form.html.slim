@@ -1,0 +1,17 @@
+=simple_form_for @mailing, :html => {:class => "form-horizontal"} do |f|
+  -if @mailing.persisted?
+    =f.input :id, as: :string, label: _("Id"), input_html: {value: @mailing.id, disabled: true}, required: false
+    =f.input :created_at, as: :string, label: _("Created"), input_html: {value: time(@mailing.created_at, false), disabled: true}, required: false
+    =f.input :updated_at, as: :string, label: _("Updated"), input_html: {value: time(@mailing.updated_at, false), disabled: true}, required: false
+  =f.input :subject, label: _("Subject")
+  =f.input :reply_to, label: _("Reply Email")
+  =f.input :query_locations, label: _("Targets"), as: :grouped_select, collection: [["Continent", Continent.for_select.map{ |v| [v.name, "Continent:#{v.id}"] }], ["Country", Country.for_select.map{ |v| [v.name, "Country:#{v.id}"] }]], :group_method => :last, :input_html => {:multiple => true}
+  =f.input :query_excluded_locations, label: _("Exclusions"), as: :grouped_select, collection: [["Continent", Continent.for_select.map{ |v| [v.name, "Continent:#{v.id}"] }], ["Country", Country.for_select.map{ |v| [v.name, "Country:#{v.id}"] }]], :group_method => :last, :input_html => {:multiple => true}
+  =f.input :html, input_html: {class: "editor full-width"}, :label => false
+  .form-actions
+    =f.submit _("Submit"), class: "btn btn-primary", data: {disable_with: _("Please wait...")}
+
+coffeeview:
+  $ ->
+    $("#mailing_query_locations").select2()
+    $("#mailing_query_excluded_locations").select2()

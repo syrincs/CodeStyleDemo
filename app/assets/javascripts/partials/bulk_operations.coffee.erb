@@ -1,0 +1,13 @@
+$ ->
+  $("#bulk-operations").on "click", "a[data-operation]", (e) ->
+    $el = $(@)
+    e.preventDefault()
+    return unless confirm("<%=_("Are you sure?")%>")
+    form = $("form#list")
+    form.append($("<input>").attr(type: "hidden", name: "operation", value: $el.data("operation")))
+    form.submit()
+
+  $("input[name=toggler]").change ->
+    checked = $(@).prop("checked")
+    $('input[name="list[]"]').each ->
+      $(@).prop("checked", checked)

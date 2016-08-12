@@ -1,0 +1,12 @@
+.modal-dialog
+  .modal-content
+    =simple_form_for [@offer, @image], :html => {:class => "form-horizontal"}, remote: true do |f|
+      .modal-header
+        a.close(data-dismiss="modal") ×
+        h4.modal-title=_("Edit picture")
+
+      .modal-body
+        =f.input :remarks, label: _("Type"), collection: Image.types
+
+      .modal-footer
+        =f.submit _("Submit"), class: "btn btn-primary", data: {disable_with: _("Please wait...")}

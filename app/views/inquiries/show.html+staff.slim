@@ -1,0 +1,34 @@
+-provide :page_title, _("Inquiry %{id}") % {id: @inquiry.id}
+
+.panel.panel-default
+  .panel-heading Tools
+  .list-group
+    =link_to _("Show item"), @inquiry.buyable, :class => "list-group-item"
+    -if can?(:show, @inquiry.user)
+      =link_to _("Show buyer"), @inquiry.user, :class => "list-group-item"
+    -if can?(:show, @inquiry.seller)
+      =link_to _("Show seller"), @inquiry.seller, :class => "list-group-item"
+    -if can?(:show, @inquiry.assigned_employee)
+      =link_to _("Show contact"), @inquiry.assigned_employee, :class => "list-group-item"
+    -if can?(:staff_message, @inquiry)
+      =link_to _("Write to buyer"), [:staff_message, @inquiry], :remote => true, class: "list-group-item new-message"
+    -if can?(:staff_buyer_message, @inquiry)
+      =link_to _("Write as buyer"), [:staff_buyer_message, @inquiry], :remote => true, class: "list-group-item new-message"
+    -if can?(:assign_contact, @inquiry)
+      =link_to _("Assign new contact"), [:assign_contact, @inquiry], :remote => true, class: "list-group-item new-message"
+    -if can?(:closure, @inquiry)
+      =link_to _("Close inquiry"), [:closure, @inquiry], :remote => true, class: "list-group-item new-message"
+
+=simple_form_for @inquiry, html: {multipart: true, class: "form-horizontal"} do |f|
+  =field_set_tag _("Basics") do
+    =f.input :id, as: :string, label: _("Id"), input_html: {value: @inquiry.id, disabled: true}, required: false
+    =f.input :created_at, as: :string, label: _("Created"), input_html: {value: time(@inquiry.created_at, false), disabled: true}, required: false
+    =f.input :updated_at, as: :string, label: _("Updated"), input_html: {value: time(@inquiry.updated_at, false), disabled: true}, required: false
+    =f.input :item, as: :string, label: _("Item"), input_html: {value: buyable(@inquiry.buyable), disabled: true}
+    =f.input :creator, as: :string, label: _("Creator"), input_html: {value: @inquiry.creator.fullname, disabled: true}, required: false
+    =f.input :buyer, as: :string, label: _("Buyer"), input_html: {value: @inquiry.user.fullname, disabled: true}, required: false
+    =f.input :assigned_employee, as: :string, label: _("Contact"), input_html: {value: @inquiry.assigned_employee ? @inquiry.assigned_employee.fullname : "", disabled: true, :id => ""}
+    =f.input :state, as: :string, label: _("State"), input_html: {value: inquiry_state(@inquiry.state), disabled: true}
+
+br
+=render "messages", messages: @inquiry.messages

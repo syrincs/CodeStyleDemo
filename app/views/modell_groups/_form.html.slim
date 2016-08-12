@@ -1,0 +1,39 @@
+=simple_form_for @modell_group, :html => {:class => "form-horizontal"} do |f|
+  =field_set_tag _("Model group") do
+    -if @modell_group.id
+      =f.input :id, as: :string, label: _("Id"), input_html: {value: @modell_group.id, disabled: true}, required: false
+      =f.input :created_at, as: :string, label: _("Created"), input_html: {value: time(@modell_group.created_at, false), disabled: true}, required: false
+      =f.input :updated_at, as: :string, label: _("Updated"), input_html: {value: time(@modell_group.updated_at, false), disabled: true}, required: false
+    =f.input :name, label: _("Name")
+    =f.input :modell_ids, label: _("Modells"), :input_html => {:value => @modell_group.modells.pluck(:id)*"|"}
+  .form-actions
+    =f.submit _("Submit"), class: "btn btn-primary", data: {disable_with: _("Please wait...")}
+
+coffeeview:
+  $ ->
+    data = <%=Modell.order(:name).map{ |modell| {:id => modell.id, :text => modell.name} }%>
+
+    $("#modell_group_modell_ids").select2
+      tags: []
+      separator: "|"
+      createSearchChoice: -> null
+      nextSearchTerm: (selectedObject, currentSearchTerm) -> currentSearchTerm
+
+      initSelection: (element, callback) ->
+        selection = data.filter((item) -> item.id.toString() in element.val().split("|"))
+        callback(selection)
+
+      query: (options) ->
+        pageSize = 250
+        startIndex  = (options.page - 1) * pageSize
+        filteredData = data
+
+        if options.term && options.term.length > 0
+          term = options.term.toUpperCase()
+          options.context ?= data.filter((item) -> item.text.toUpperCase().indexOf(term) is 0)
+          filteredData = options.context
+
+        options.callback
+          context: filteredData
+          results: filteredData.slice(startIndex, startIndex + pageSize)
+          more: (startIndex + pageSize) < filteredData.length

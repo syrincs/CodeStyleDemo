@@ -1,0 +1,38 @@
+doctype html
+html
+  head
+    =render "layouts/layout_head"
+  body#home-revo-slider2
+    =render "layouts/layout_body"
+
+    section.action-area-mini
+      .foto-service.small-header
+        .foto-pattern
+          ul.container.breadcrumb
+            li
+              a href="#" Home
+              span.divider 
+                | //
+            li
+              a href="#"
+                =controller_name
+              span.divider 
+                | //
+            li.active
+              a href="#"
+                =action_name
+          .container
+            h3.page-title.pull-left
+              | 
+              small 
+                | Administration
+    .white-wrap.header-margin
+      section.container
+        aside.span2
+          .aside-wrap
+            =render "admin_vertical"
+        .span9.offset1
+          =yield
+
+    =render "layouts/layout_foot"
+  #modal.modal(data-backdrop="static" data-keyboard="false")

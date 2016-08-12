@@ -1,0 +1,19 @@
+=simple_form_for @offer, :html => {:class => ""} do |f|
+  =field_set_tag _("Basics") do
+    -if manager? || admin?
+      =f.input :user, as: :string, label: _("User"), input_html: {id: "offer_user", value: @offer.user ? @offer.user.company : ""}
+      =f.input :user_id, as: :hidden
+    =f.input :brand, label: _("Brand"), collection: Brand.for_select, class: "input-size"
+    =f.input :modell_id, label: _("Model"), collection: [], :required => false
+  .form-actions
+    =hidden_field_tag :clear_errors, 1
+    =f.submit _('Continue'), data: {disable_with: _("Please wait...")}, :class => "btn btn-primary"
+
+coffeeview:
+  $ ->
+    $("#offer_user").user_autocomplete(<%=autocomplete_users_path%>, "dealer")
+    $("#offer_brand").change ->
+      $.getJSON "/brands/#{$(@).val()}/modells", (result) ->
+        $('#offer_modell_id').populateFromArray(result)
+    $("#offer_brand").select2({ width: '60%' })
+    $("#offer_modell_id").select2({ width: '60%' })

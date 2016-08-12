@@ -1,0 +1,79 @@
+=simple_form_for @modell, remote: true, html: { id: "model-form", class: "form-horizontal" }, defaults: { label: false } do |f|
+  .modal-content
+    .modal-header
+      button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+      h3 #{action_name.titleize} model
+    .modal-body
+      -if @modell.id
+        ="Created at: #{time(@modell.created_at, false)}"
+        br 
+        ="Updated at: #{time(@modell.updated_at, false)}" 
+        br
+      br
+      =f.input :name, placeholder: _("Name"), autofocus: true
+      =f.input :brand_id, collection: Brand.order(:name)
+      =f.input :category_id, collection: categories_as_padded_tree
+      =f.input :modell_group_id, include_blank: "Select a model group...", collection: ModellGroup.order(:name)
+    .modal-footer
+      .tools.btn-group
+        =f.submit _("Submit"), class: "btn btn-primary", data: { disable_with: _("Please wait...") }
+        =button_tag "Cancel", class: "btn btn-default", data: { dismiss: "modal" }
+
+coffeeview:
+  $ ->
+    $("#modell_brand_id").select2 placeholder: 'Select a brand...', allowClear: true
+    $("#modell_category_id").select2  placeholder: 'Select a category...', allowClear: true
+
+/  @availableProperties = <%=Property.order(:name).pluck(:name)%>
+/  @modellProperties = <%=@modell.properties%>
+
+
+    / $("#offer-properties").select2
+    /   tags: window.availableProperties
+    /   separator: "|"
+
+    / $("#offer-properties").select2("container").find("ul.select2-choices").sortable
+    /   containment: "parent"
+    /   start: -> $("#offer-properties").select2("onSortStart")
+    /   update: -> $("#offer-properties").select2("onSortEnd")
+
+/     .form-actions
+/       a.btn.btn-default(data-disable-with=_("Please wait...") ng-click="submit()")=_("Submit")
+/ .ng-cloak(ng-controller="ModellFormCtrl")
+/   =simple_form_for @modell, :html => {:id => "model-form", :class => "form-horizontal"} do |f|
+/     =field_set_tag _("Model") do
+/       -if @modell.id
+/         =f.input :id, as: :string, label: _("Id"), input_html: {value: @modell.id, disabled: true}, required: false
+/         =f.input :created_at, as: :string, label: _("Created"), input_html: {value: time(@modell.created_at, false), disabled: true}, required: false
+/         =f.input :updated_at, as: :string, label: _("Updated"), input_html: {value: time(@modell.updated_at, false), disabled: true}, required: false
+/       =f.input :name, label: _("Name")
+/       =f.input :brand_id, label: _("Brand"), collection: Brand.order(:name)
+/       =f.input :category_id, label: _("Category"), collection: categories_as_padded_tree
+/       =f.input :modell_group_id, label: _("Model group"), collection: ModellGroup.order(:name)
+
+/     =field_set_tag _("Model specific properties"), "ng-controller" => "ModellFormPropertiesCtrl" do
+/       .form-group(ng-repeat="property in properties")
+/         .col-md-10
+/           input.form-control(ng-model="property.name" typeahead init-focus)
+/         .col-md-30
+/           input.form-control(ng-model="property.value")
+/       .form-group
+/         .col-md-40
+/           a.btn.btn-default(ng-click="add()")=_("Add property")
+
+/     =field_set_tag _("Offer specific properties") do
+/       .form-group
+/         label.control-label.col-md-10=_("Properties")
+/         .col-md-30
+/           input.form-control#offer-properties(type="hidden" value=@modell.property_designations.where(:kind => "Offer").order(:id).includes(:property).map{ |v| v.property.name }*"|")
+
+/     =field_set_tag _("Serials") do
+/       =f.simple_fields_for :serials do |f1|
+/         =f1.input :year, label: _("Year")
+/         =f1.input :serial, label: _("Serial")
+/         -unless f1.object.new_record?
+/           =f1.input :_destroy, as: :boolean
+
+/     .form-actions
+/       a.btn.btn-default(data-disable-with=_("Please wait...") ng-click="submit()")=_("Submit")
+

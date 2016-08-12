@@ -1,0 +1,58 @@
+-provide :page_title, _("Mailing")
+
+.panel.panel-default
+  .panel-heading Tools
+  .list-group
+    -if can?(:copy, @mailing)
+      =link_to _("Copy mailing"), [:copy, @mailing], :class => "list-group-item"
+    -if can?(:edit, @mailing)
+      =link_to _("Edit mailing"), [:edit, @mailing], :class => "list-group-item"
+    -if can?(:destroy, @mailing)
+      =link_to _("Delete mailing"), @mailing, method: :delete, data: {confirm: _("Are you sure?")}, :class => "list-group-item"
+
+table.table.table-bordered
+  tr
+    td.col-md-10=_("Created")
+    td=l @mailing.created_at
+  tr
+    td=_("Subject")
+    td=@mailing.subject
+  tr
+    td=_("Sender")
+    td=@mailing.sender.fullname
+  tr
+    td=_("Reply Email")
+    td=@mailing.reply_to
+  tr
+    td=_("Targets")
+    td=mailing_query_locations(@mailing)
+  tr
+    td=_("Exclusions")
+    td=mailing_query_excluded_locations(@mailing)
+  tr
+    td=_("Recipients")
+    td
+      -if @mailing.pending?
+        ="-"
+      -else
+        =number_with_delimiter @mailing.recipients_count
+  tr
+    td=_("Delivery started")
+    td
+      -if @mailing.pending?
+        ="-"
+      -else
+        =time @mailing.delivery_started_at
+  tr
+    td=_("Delivery completed")
+    td
+      -if @mailing.delivered?
+        =time @mailing.delivery_finished_at
+      -else
+        -if @mailing.in_delivery?
+          |#{number_with_delimiter @mailing.deliveries_count} / #{number_with_delimiter @mailing.recipients_count}
+        -else
+          ="-"
+
+br
+iframe.mailing(src=html_mailing_path(@mailing))

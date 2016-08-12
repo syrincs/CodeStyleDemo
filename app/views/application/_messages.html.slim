@@ -1,0 +1,15 @@
+legend=_("Conversation history")
+
+-if messages.none?
+  p=_("No conversation available yet.")
+-else
+  -messages.order("id DESC").each do |message|
+    .row
+      .col-md-10
+        p
+          strong=message.sender.name
+          br
+          =ago message.created_at
+      .col-md-30
+        ==message.html
+    hr

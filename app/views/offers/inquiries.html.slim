@@ -1,0 +1,31 @@
+-provide :page_title, _("Inquiries of offer %{name}") % {name: @offer.id}
+
+-inquiries = @inquiries.order(:id)
+-if inquiries.any?
+  table
+    thead
+      tr
+        td=_("No")
+        td=_("Buyer")
+        td=_("Sales contact")
+        td=_("Created")
+        td=_("Last update")
+        td=_("Tools")
+    tbody
+      -inquiries.each do |inquiry|
+        tr
+          td=inquiry.id
+          td=inquiry.user.fullname
+          td
+            -if inquiry.assigned_employee
+              =inquiry.assigned_employee.fullname
+          td=ago inquiry.created_at
+          td=ago inquiry.last_contact_at
+          td
+            -if can?(:show, inquiry)
+              ='link_to "show", inquiry
+            -if can?(:show, inquiry.user)
+              ='link_to "buyer", inquiry.user
+-else
+  p=_("This offer doesn't have any inquiries yet.")
+

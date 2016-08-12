@@ -1,0 +1,10 @@
+=form.input :"property#{index}", :label => property.name, :as => :string
+
+coffeeview:
+  $ ->
+    $("#filter_property#{=index}").select2
+      tags: <%=@filter.property_values_list(index).order(:value).pluck(:value)%>
+      separator: "|"
+      createSearchChoice: -> null
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0

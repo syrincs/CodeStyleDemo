@@ -1,0 +1,19 @@
+doctype html
+html(lang=I18n.locale)
+  head
+    =stylesheet_link_tag "email", media: "all"
+  body
+    .page
+      .container
+        .header
+          =link_to image_tag("logo.png"), root_url
+          h2=_("Partner to the graphic arts industry")
+        .content
+          =yield
+        .disclaimer
+          -disclaimer =yield(:disclaimer)
+          -if disclaimer.present?
+            =disclaimer
+            br
+          =_("All offers based on our general sales conditions, without obligation and subject to prior sales.")
+

@@ -1,0 +1,40 @@
+-provide :page_title, _("Mailings")
+
+.master-toolbar.btn-group
+  =link_to fa_icon("file", text: _("New mailing")), [:new, :mailing], class: "btn btn-primary"
+br
+hr
+input#filter.form-control(type="text" placeholder="Filter by subject")
+
+table.table.table-striped.table-hover.mailings
+  thead
+    tr
+      th=_("Created")
+      th=_("Subject")
+      th=_("Sender")
+      th=_("Targets")
+      th=_("Exclusions")
+      th=_("Recipients")
+      th=_("Status")
+      th
+  -if @mailings.any?
+    =render "index"
+  -else
+    tbody
+      tr
+        td(colspan=10)=_("No matching mailings found.")
+
+coffeeview:
+  $ ->
+    $("#filter").on "input", (e) ->
+      input = $(@)
+      idleWait 250, ->
+        $.ajax
+          dataType: "html"
+          url: <%=mailings_path(remote: true)%>
+          data:
+            filter: input.val()
+          success: (data) ->
+            table = $("table.mailings")
+            table.find("tbody, tfoot").remove()
+            table.append(data)

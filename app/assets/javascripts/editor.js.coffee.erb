@@ -1,0 +1,9 @@
+@enableEditors = (root) ->
+  $("textarea.editor", root).each ->
+    id = $(@).attr('id')
+    CKEDITOR.replace id,
+      height: $(@).height()
+      width: $(@).width()
+
+$ ->
+  enableEditors("body")

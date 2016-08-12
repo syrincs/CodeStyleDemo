@@ -1,0 +1,20 @@
+-user = User.default_contact
+
+p
+  =_("Best regards/ M.f.G./ Salutations")
+p
+  |#{user.company}
+  br
+  |#{user.street}
+  br
+  |#{user.city} (#{user.country.name})
+p
+  -if user.phone.present?
+    |#{_("Phone:")} #{user.phone}
+  -if user.mobile.present?
+    br
+    |#{_("Mobile:")} #{user.mobile}
+  -if user.fax.present?
+    br
+    |#{_("Fax:")} #{user.fax}
+

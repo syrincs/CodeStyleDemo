@@ -1,0 +1,12 @@
+-brands.each do |brand|
+  tr
+    td=brand.name
+    td=number_with_delimiter brand.modells_count
+    td
+      .anchor
+        =number_with_delimiter brand.offers_count
+    td
+      .btn-group
+        =link_to fa_icon("eye"), [:modells, brand], class: "btn btn-primary custom-tooltip blue-tooltip", data: { original_title: "Show models" }
+        =link_to fa_icon("pencil"), [:edit, brand], remote: true, class: "btn btn-primary"
+        =link_to fa_icon("trash-o"), brand, remote: true, class: "btn btn-primary", method: :delete, data: { confirm: _("Are you sure?") }

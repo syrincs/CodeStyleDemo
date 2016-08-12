@@ -1,0 +1,81 @@
+-provide :page_title, _("Logins")
+
+=will_paginate @logins, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "logins_page"
+
+table.table.table-striped.table-hover.brands
+  caption
+    h4.pull-left =_("Logins")
+    p.info.pull-left
+      =page_entries_info @logins
+
+    ul.nav.nav-pills
+      li.dropdown
+        =button_tag fa_icon("chevron-down", text: "search filters", right: true), class: "btn btn-primary dropdown-toggle"
+        ul.dropdown-menu.dropdown-form
+          li
+            =simple_form_for @filter, url: logins_path, method: :get, html: { class: "form-vertical" }, wrapper: :vertical_form, defaults: { label: false } do |f|
+              =f.input :user, placeholder: _("User")
+              =f.input :status, include_blank: "Select Status...", collection: Login::STATI
+              =f.input :ip, placeholder: _("IP-Address")
+              =f.input :country, placeholder: _("IP-Country"), as: :string
+              =f.hidden_field :shown_items, value: params[:filter].present? ? params[:filter][:shown_items] : "25" 
+              br
+              .btn-group
+                =f.submit _("Apply filters"), class: "btn btn-primary"
+                =f.submit _("Clear"), type: "reset", class: "btn btn-info", name: "clear"
+
+      .select-wrap.pull-right
+        select#shop-select name="shop-select" tabindex="1"
+          option value=""
+          option value="25"  Show 25 items per page
+          option value="50"  Show 50 items per page
+          option value="75"  Show 75 items per page
+          option value="100"  Show 100 items per page
+
+  thead
+    tr
+      th=link_to_order _("Date"), "id:desc", @filter
+      th=link_to_order _("User"), "user", @filter
+      th=link_to_order _("Status"), "status", @filter
+      th=link_to_order _("IP-Address"), "ip", @filter
+      th=link_to_order _("IP-Country"), "country", @filter
+      th
+
+  -if @logins.blank?
+    tbody
+      tr
+        td(colspan=10)
+          =_("No matching logins found.")
+  -else
+    tbody
+      -@logins.each do |login|
+        tr
+          td
+            =time login.created_at
+          td
+            =login.user.fullname
+          td
+            =login.status
+          td
+            =login.ip
+          td
+            .anchor
+              =login.country
+          td
+            .tools.btn-group
+              =link_to fa_icon("eye"), login.user, class: "btn btn-primary"
+
+=will_paginate @logins, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "logins_page"
+
+coffeeview:
+  $ ->
+    if $('#filter_shown_items').val()
+      $('#shop-select').val($('#filter_shown_items').val())
+    else
+      $('#shop-select').val(25)
+
+    $('#shop-select').change ->
+      selectVal = $('#shop-select :selected').val()
+      $('#filter_shown_items').val(selectVal)
+      $('#new_filter').submit()
+      return

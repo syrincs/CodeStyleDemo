@@ -1,0 +1,94 @@
+-provide :page_title, _("Bank details for money transfers")
+-provide :header_title, "Bank details"
+-provide :foto_class, "foto-service"
+-provide :action_button
+  ul.ch-second-grid
+    li.pull-right.download-button
+      .ch-second-item
+        h4
+          | show offers
+          span.download-button-arrow
+        =link_to page_path("buy"), class: "ch-second-info"
+          h4
+            | show offers
+            span.download-button-arrow
+
+-provide :header_area
+  =render "layouts/big_header"
+
+.page.bankdetails
+  p
+    strong=_("Account holder:")
+    br
+    |H  ROESINGER ET PARTNER SARL
+    br
+    |6 RUE DE L'HOTEL DE VILLE
+    br
+    |68330 HUNINGUE (France)
+
+  hr
+  p
+    strong=_("Please use the respective currency account when tranfering money to France!")
+  p
+    strong=_("For payments in EURO (€) to our account in France:")
+    br
+    |Banque Populaire Alsace
+    br
+    |IBAN: FR76 1760 7000 0149 2167 8651 293
+    br
+    |(#{_("International Bank Account Number")})
+    br
+    |SWIFT: CCBPFRPPSTR
+    br
+    |(#{_("Bank Identification Code")})
+
+  p
+    strong=_("For payments in USD ($) to our account in France:")
+    br
+    |Banque Populaire Alsace
+    br
+    |IBAN: FR76 1760 7000 0170 4970 5461 909
+    br
+    |(#{_("International Bank Account Number")})
+    br
+    |SWIFT: CCBPFRPPSTR
+    br
+    |(#{_("Bank Identification Code")})
+
+  p
+    strong=_("For payments in GBP (£) to our account in France:")
+    br
+    |Banque Populaire Alsace
+    br
+    |IBAN: FR76 1760 7000 0170 4922 9618 418
+    br
+    |(#{_("International Bank Account Number")})
+    br
+    |SWIFT: CCBPFRPPSTR
+    br
+    |(#{_("Bank Identification Code")})
+
+  hr
+  p
+    strong=_("When using our bank account in GERMANY you can pay either using EUR, USD or GBP!")
+  p
+    |DEUTSCHE BANK
+    br
+    |IBAN: DE04 683 700 240 2796191 00
+    br
+    |(#{_("International Bank Account Number")})
+    br
+    |SWIFT: DEUT DE DB683
+    br
+    |(#{_("Bank Identification Code")})
+
+  hr
+  p
+    strong=_("Bank details for Letter of Credit")
+  p
+    =link_to _("What is a Letter of Credit?"), page_path("letterofcredit")
+    br
+    =link_to _("INSTRUCTIONS FOR PAYMENT BY LETTER OF CREDIT [PDF]"), asset_path("letterofcredit.pdf")
+
+br
+br

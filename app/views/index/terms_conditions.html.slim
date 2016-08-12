@@ -1,0 +1,71 @@
+-provide :page_title, _("Terms & conditions")
+-provide :header_title, _("Terms & conditions")
+-provide :foto_class, "foto-service"
+-provide :action_button
+  ul.ch-second-grid
+    li.pull-right.download-button
+      .ch-second-item
+        h4
+          | show offers
+          span.download-button-arrow
+        =link_to page_path("buy"), class: "ch-second-info"
+          h4
+            | show offers
+            span.download-button-arrow
+
+-provide :header_area
+  =render "layouts/big_header"
+
+ol
+  li
+    h3
+      |General Business
+    p
+      |All orders are accepted and executed only under the terms and conditions stated bellow, which are accepted by the purchaser by placing an order or accepting delivery. Different arrangements require our written approval.
+    p
+      |Regulations of the purchaser, which are stated in order forms, confirmations of orders etc., and which are contradictory to our terms and conditions are not accepted by our accepting the order. Our terms and conditions are applicable for all future legal relations with the customers, even if they are not expressly agreed upon when future contracts are concluded. Oral declarations and arrangements require our written confirmation to come into force. A contract becomes effective only when the order was confirmed by us in writing.
+    br
+  li
+    h3
+      |Offer and Delivery
+    p
+      |Unless expressly defined as binding, our offers are made without obligation. All machinery is subject to availibility. We reserve the right to make changes and alterations to advertised machinery details without obligation to notify any person, organisation or institution of such changes. We strive to maintain the accuracy of the data we present. Nevertheless, we make no representation or warranties, epress or implied, with respect to all data we make available on the Internet, including, but not limited to warranties of merchantability or fitness for a particular purpose.
+    p
+      |Our prices are quoted according the relevant offers, respectively valid Price-Lists, and always subject to confirmation. Delivery is effected for the account of the purchaser, and the risk shall pass shall be fixed in accordance with the International Rules for the Interpretation of Trade Terms (#{link_to "Incoterms 2000", page_path("incoterms1")}) of the International Chamber of Commerce in force on the date of the order-confirmation. He has to insure the consignment against risk of transport, demages, etc. at his own cost. We are entitled to modify the agreed price for our goods reasonably, if the production and/or overhead cost has increased after the conclusion of the contract. If possible, we keep the times of delivery indicated by us. In case of delayed delivery the customer is entitled to claim for damages or the right of cancellation - as far as there are no legal regulations to the contrary - only, if the delay is intentional or there is a risk of gross negligence.
+    br
+
+  li
+    h3
+      |Payment
+    ul
+      li
+        p
+          strong Via bank-transfer
+        p
+          |By receipt of our proforma-invoice an down-payment of 20% of total amount is due for payment via SWIFT-transfer.
+        p
+          |80% (balance) has to be credited in our account latest 5 days before starting dismantling (or loading, if the equipment is already dismantled).
+
+      li
+        p
+          strong By letter of credit
+        p
+          |80% of total amount can be covered through IRLOC (irrevocable, confirmed letter of credit) payable on the counter of one of our bankers by first presentation of usual shipping documents.
+        p
+          |For more details see: #{link_to "Letter of Credit", page_path("letterofcredit")}
+      br
+
+  li
+    h3
+      |Reservation of Title
+    p
+      |All goods delivered by us remain our property until such time as full payment of all invoices arising out of the business relations has been made. In the case of installation of goods under our reserve, we are entitled to ownership or part-ownership of the new product amounting to the value of our goods in relation to the value of the new product. We consider the installation of our goods in other equipment as being carried out on our part.
+    br
+
+  li
+    h3
+      |Place of Settlement - Court Competency
+    p
+      |All dissensions arising from the contract of delivery must be finally settled according to the arbitration proceedings of the international Chamber of Commerce, through one or more recognized arbitrators. If an agreement cannot be reached by such a proceeding, it is agreed that for all disputes arising from the contract of delivery or in connection with it, the French law is competent with Mulhouse as place of settlement for all obligations. The place of performance is the address of our registered office at F-68330 Huningue.
+br
+br

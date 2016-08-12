@@ -1,0 +1,11 @@
+p=_("Dear %{name},") % {name: @inquiry.contact.name}
+
+p
+
+p==_('Please open <<this page>> and click on "show item" to see the offer again.'){ inquiry_url(@inquiry, autologin_secret: @inquiry.autologin_secret) }
+
+p==_('If you would like to proceed - or in case you need additional information, please <<click here>> to contact me again.'){ inquiry_url(@inquiry, autologin_secret: @inquiry.autologin_secret, anchor: "write") }
+
+p=_("Thanks for your usual cooperation and looking forward to your earliest reply.")
+
+=render "application/email_signature", user: @message.user

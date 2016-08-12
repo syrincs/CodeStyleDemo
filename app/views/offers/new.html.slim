@@ -1,0 +1,47 @@
+-provide :page_title, _("New offer")
+
+section.action-area-mini
+  .foto-service
+    .foto-pattern
+      ul.container.breadcrumb
+        li
+          a href="#"  Home
+          span.divider 
+            | // 
+        li.active Want to sell
+      .container
+        h2.page-title.pull-left.page-title-margin
+          | sell your
+          small Equipment
+        ul.ch-second-grid
+          li.pull-right.download-button
+            .ch-second-item
+              h4
+                | show 
+                br
+                | offers
+                br
+                span.download-button-arrow
+              a.ch-second-info href="#" 
+                h4
+                  | show 
+                  br
+                  | offers
+                  br
+                  span.download-button-arrow
+.white-wrap
+  .container.grey-lines.page-content
+  	.row
+      .span4.offset1
+        p=_("The following information is requested to buy or to list your equipment free of charge into the EDB.")
+
+        p=_("Use ONE (1) Submit Form for each item and prepare proper description. Mention base of price (ex site, or loaded on truck) and time of delivery. Attach pictures if available, and confirm technical and optical conditions. We will contact you if we need additional information, and also if we are interested to buy. You should inform us immediately if your offer is no longer available.")
+
+        p==_("If your brand/ model you want to sale is not listed below please click <<here>>."){ [[[:new, :raw_offer]]] }
+      -if @offer.user_id && @offer.modell_id
+        -@form.errors.clear if @clear_errors
+        .span4.border-double.padding.offset1
+          =render "form"
+      -else
+        .span4.border-double.padding.offset1
+          =render "form_basics"

@@ -1,0 +1,9 @@
+doctype html
+html(lang=I18n.locale)
+  head
+    =render "head"
+    =stylesheet_link_tag "screen", media: "all"
+    =javascript_include_tag "screen"
+  body
+    =yield
+

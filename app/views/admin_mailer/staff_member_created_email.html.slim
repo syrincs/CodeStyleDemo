@@ -1,0 +1,29 @@
+p=_("Dear admins,")
+
+p=_("just for your information - a new staff member has just been created.")
+
+p
+  strong=_("Operator")
+  br
+  =_("Id: %{id}") % {:id => @operator.id}
+  br
+  =_("Name: %{name}") % {:name => @operator.fullname}
+  br
+  =_("Email: %{email}") % {:email => @operator.email}
+  br
+  =_("Role: %{role}") % {:role => @operator.role}
+
+p
+  strong=_("Staff member")
+  br
+  =_("Id: %{id}") % {:id => @user.id}
+  br
+  =_("Name: %{name}") % {:name => @user.fullname}
+  br
+  =_("Email: %{email}") % {:email => @user.email}
+  br
+  =_("Role: %{role}") % {:role => @user.role}
+
+p=_("Please make sure everything is in order.")
+
+p=_("The ROEPA-System")

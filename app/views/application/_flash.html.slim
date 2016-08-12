@@ -1,0 +1,17 @@
+-if flash
+  -if flash[:alert]
+    .alert.alert-danger.fade.in
+      a.close data-dismiss="alert" href="#"  &times;
+      =flash[:alert]
+  -if flash[:warning]
+    .alert.alert-warning.fade.in
+      a.close data-dismiss="alert" href="#"  &times;
+      =flash[:warning]
+  -if flash[:notice]
+    .alert.alert-info.fade.in
+      a.close data-dismiss="alert" href="#"  &times;
+      =flash[:notice]
+  -if flash[:success]
+    .alert.alert-success.fade.in
+      a.close data-dismiss="alert" href="#"  &times;
+      =flash[:success]

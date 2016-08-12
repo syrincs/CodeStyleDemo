@@ -1,0 +1,36 @@
+-provide :page_title, _("Currencies")
+
+=will_paginate @currencies, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "currencies_page"
+
+table.table.table-hover.table-striped
+  caption
+    h4.pull-left
+      =_("Currencies")
+    p.create.btn-group
+      =link_to fa_icon("plus-circle", text: _("New currency")), new_currency_path, class: "btn btn-info"
+    form.search accept-charset="UTF-8" action="#" method="get" 
+      p.info.pull-left
+        =page_entries_info @currencies
+      /input name="continents[search][text]" placeholder="Search" type="text"
+  thead
+    tr
+      th=_("Code")
+      th=_("Name")
+      th.right=_("Rate")
+      th.right=_("Update")
+      th.right=_("Offers")
+      th
+  tbody
+    -@currencies.order(:code).each do |currency|
+      tr
+        td=currency.code
+        td=currency.name
+        td.right=number_with_precision currency.rate, precision: 4
+        td.right=l currency.updated_at
+        td.right=number_with_delimiter currency.offers.count
+        td
+          .btn-group
+            =link_to fa_icon("pencil"), [:edit, currency], class: "btn btn-primary default-action"
+            =link_to fa_icon("trash-o"), currency, method: :delete, data: {confirm: _("Are you sure?")}, class: "btn btn-primary"
+
+=will_paginate @currencies, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "currencies_page"

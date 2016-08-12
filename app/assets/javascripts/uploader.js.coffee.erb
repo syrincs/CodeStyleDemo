@@ -1,0 +1,33 @@
+@init_uploader = (settings) ->
+  $("#uploader").pluploadQueue
+    runtimes: 'html5, silverlight, flash, html4'
+    url: settings.upload_url
+    resize:
+      width: 2048
+      height: 2048
+      quality: 85
+    filters: [
+      {
+        title: "Bilder"
+        extensions: "jpg,jpeg,gif,png,tif,bmp"
+      }
+    ]
+    multi_selection: true
+    multipart_params: settings.multipart_params
+
+  uploader = $("#uploader").pluploadQueue()
+
+  uploader.bind 'BeforeUpload', (up, file) ->
+    comment = $("#" + file.id).find('select').val()
+    up.settings.multipart_params = $.extend(
+      up.settings.multipart_params
+      {
+        comment: comment
+      }
+    )
+
+  uploader.bind 'UploadComplete', (up, files) ->
+    $("#modal").modal("hide")
+    $('.images').load("form_images")
+
+  $('#uploader > div.plupload').css('z-index', '99999')

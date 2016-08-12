@@ -1,0 +1,40 @@
+-provide :page_title, _("Inbox")
+
+.panel.panel-default
+  .panel-heading Filter
+  .panel-body
+    =simple_form_for @filter, url: inbox_messages_path, method: :get, html: {class: "form-vertical"}, wrapper: :vertical_form do |f|
+      =f.input :topic, label: _("Topic")
+      =f.input :read, as: :boolean, label: _("Show read messages"), wrapper: :vertical_boolean
+      .pull-right
+        =f.submit _("Clear"), type: "reset", class: "btn clear", name: "clear"
+      =f.submit _("Apply filters"), class: "btn btn-primary"
+
+=render "menu"
+
+table#inbox.table.table-striped.table-hover
+  thead
+    tr
+      th
+      th
+        =_("Date")
+      th
+        =_("Topic")
+      th
+        =_("Sender")
+  =render "inbox"
+
+coffeeview:
+  $ ->
+    $("#filter").on "input", (e) ->
+      input = $(@)
+      idleWait 250, ->
+        $.ajax
+          dataType: "html"
+          url: <%=inbox_messages_path(remote: true)%>
+          data:
+            filter: input.val()
+          success: (data) ->
+            table = $("table#inbox")
+            table.find("tbody, tfoot").remove()
+            table.append(data)

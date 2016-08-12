@@ -1,0 +1,8 @@
+p=_("Dear {firstname} {lastname},")
+
+.item
+  =render "packages/email", package: @package
+
+=render "email_signature", user: current_user
+=render "disclaimer"
+

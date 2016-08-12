@@ -1,0 +1,10 @@
+.brand-buttons
+  ul.list-listnav
+    -@modells.in_groups_of(4).each do |group|
+      -group.each do |modell|
+        -if modell
+          li
+            =link_to "#", class: "modell brand-button", data: { id: modell.id } do |n|
+              span =modell.name
+      .clear
+br

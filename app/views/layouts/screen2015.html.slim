@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    =render "layouts/layout_head"
+
+  body#home-revo-slider2
+    =render "layouts/layout_body"
+    =yield :slider
+    =yield :header_area    
+    .white-wrap.header-margin
+      section.container
+
+        =yield :sidebar
+        =yield
+
+    =render "layouts/layout_foot"
+
+  #modal.modal(data-backdrop="static" data-keyboard="false")

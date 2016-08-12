@@ -1,0 +1,4 @@
+-if message_reception.read?
+  =link_to fa_icon("star-o"), "#", :class => "mark-unread", :data => {:url => url_for([:unread, message_reception.message])}
+-else
+  =link_to fa_icon("star"), "#", :class => "mark-read", :data => {:url => url_for([:read, message_reception.message])}

@@ -1,0 +1,37 @@
+-unless current_user && ["employee", "manager", "admin"].include?(current_user.role)
+  h2.centered.strong All categories
+  hr
+  ul.categories-list
+    -@categories.order(:position).each do |category|
+      li.span2
+        =link_to category, class: "categories-link"
+          h5
+            =category.name
+            | &nbsp;
+            span.badge =number_with_delimiter category.subtree_approved_offers_count
+          =image_tag "redesign2015/offset_machine.png", class: "categories-icon"
+-else
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th=_("Name")
+        th.right=_("Offers")
+        th.right=_("Children")
+        th=_("Tools")
+    tbody
+      -@categories.order(:position).each do |category|
+        tr
+          td
+            =category.name
+          td.right
+            =number_with_delimiter category.subtree_offers_count
+          td.right
+            =number_with_delimiter category.children_count
+          td
+            /='link_to _("subcategories"), categories_path(root_id: category.id)
+            ='link_to _("subcategories"), category_path(category.id)
+            -if can?(:edit, category)
+              ='link_to _("edit"), [:edit, category]
+            -if can?(:destroy, category)
+              ='link_to _("delete"), category, method: :delete, data: {confirm: _("Are you sure?")}
+

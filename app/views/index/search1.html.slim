@@ -1,0 +1,62 @@
+-provide :page_title,  "Individual search"
+
+-provide :sidebar do
+  .sidebar-spacer-with-tabs
+
+  .panel.panel-default
+    .panel-heading Filter
+    .panel-body
+      =simple_form_for @filter, url: page_path("search1"), :method => :get, :html => {:class => "form-vertical"}, :wrapper => :vertical_form do |f|
+        =f.input :query, label: _("Free text search")
+        =f.input :brand_ids, label: _("Brand")
+        =f.input :modells, label: _("Model")
+        -@filter.properties.each.with_index do |property, i|
+          =render "index/types/#{property.kind}", :form => f, :property => property, :index => i
+        .pull-right
+          =f.submit _("Clear"), type: "reset", class: "btn clear", name: "clear"
+        =f.submit _("Apply filters"), :class => "btn btn-primary"
+
+  -if can?(:new, OnetimeMailing)
+    .panel.panel-default#bulk-operations
+      .panel-heading=_("Bulk operations")
+      .list-group
+        =link_to _("Send by email"), "#", :class => "list-group-item send-by-email"
+
+-if @offers.any?
+  =form_tag bulk_operation_offers_path, :id => "list" do
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th=check_box_tag "toggler", nil, false
+          th=link_to_order _("No"), "id", @filter
+          th=link_to_order _("Brand"), "brand", @filter
+          th=link_to_order _("Model"), "modell", @filter
+          th=link_to_order _("Format"), "format", @filter
+          th=link_to_order _("Location"), "location", @filter
+          th=link_to_order _("Age"), "age", @filter
+          th
+            .pull-right=link_to_order _("Price"), "price", @filter
+      =render "search1"
+-else
+  p=_("No matching offers found.")
+
+coffeeview:
+  $ ->
+    $("#bulk-operations").on "click", "a.send-by-email", (e) ->
+      e.preventDefault()
+      form = $("form#list")
+      $.get(<%=new_onetime_mailing_path%>, form.serialize())
+
+    $("#filter_brand_ids").select2
+      tags: <%=@filter.brands_list.order(:name).map{ |brand| {:id => brand.id, :text => brand.name} }%>
+      separator: "|"
+      createSearchChoice: -> null
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0
+
+    $("#filter_modells").select2
+      tags: <%=@filter.modell_names_list.sort%>
+      separator: "|"
+      createSearchChoice: -> null
+      matcher: (term, text) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) == 0

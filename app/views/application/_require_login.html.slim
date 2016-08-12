@@ -1,0 +1,9 @@
+.span5
+	=field_set_tag _("New customer")
+	#signup_container
+	  -@signup = SignupForm.new
+	  =render "signups/new_ajax"
+.span4
+  =field_set_tag _("Returning customer")
+  #login_container
+    =render "sessions/new_ajax"

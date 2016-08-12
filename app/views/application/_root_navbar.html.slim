@@ -1,0 +1,11 @@
+.index-root-page
+  h1=_("Your trusted partner for second-hand graphic arts machinery and equipment")
+  #services.prepend-top
+    -%w[valutation trading installation transportation service].each.with_index do |service, i|
+      .service
+        .card
+          .face.front
+            ="ROEPA"[i]
+          .face.back
+            =image_tag "home/#{service}.jpg"
+        h4=service.humanize

@@ -1,0 +1,19 @@
+#myModal.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        a.close(data-dismiss="modal") ×
+        h4.modal-title=_("New quote request")
+
+      .modal-body
+        p=_("Thank you for your interest in %{name}. To receive a quote for this or any other offer in our database you will need to complete a one-off registration form. It takes a minute to complete and allows us to send you detailed information right to your inbox. Once registered you can make as many requests for quotes as you like.") % { name: buyable(@inquiry_by_user.buyable) }
+        =render "application/require_login"
+
+      .modal-footer
+        / button.btn.btn-default data-dismiss="modal" type="button"  Close
+        / button.btn.btn-primary type="button"  Save changes
+coffeeview:
+  $ ->
+    $('#myModal').modal 'show'
+/coffeeview:
+    /$("#modal").find(".modal-dialog").innerWidth(1000)

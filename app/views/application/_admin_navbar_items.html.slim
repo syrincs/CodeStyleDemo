@@ -1,0 +1,60 @@
+-if offers_admin_menu_items.any?
+  li
+    =link_to _("Offers"), offers_admin_menu_items.first[1]
+-if inquiries_admin_menu_items.any?
+  li
+    =link_to _("Inquiries"), inquiries_admin_menu_items.first[1]
+-if users_admin_menu_items.any?
+  li
+    =link_to _("Users"), users_admin_menu_items.first[1]
+-if can?(:index, Search)
+  li
+    =link_to _("Searches"), searches_path
+-if can?(:index, Mailing)
+  li
+    =link_to _("Mailings"), mailings_path
+-if can?(:index, Package)
+  li
+    =link_to _("Package deals"), packages_path
+-if can?(:index, Branch)
+  li
+    =link_to _("Branches"), branches_path
+-if can?(:index, Brand)
+  li
+    =link_to _("Brands"), brands_path
+-if can?(:index, Modell)
+  li
+    =link_to _("Models"), modells_path
+-if can?(:index, ModellGroup)
+  li
+    =link_to _("Model groups"), modell_groups_path
+-if can?(:index, Category)
+  li
+    =link_to _("Categories"), categories_path
+-if can?(:index, Descriptiongroup)
+  li
+    =link_to _("Descriptions"), descriptiongroups_path
+-if can?(:index, Country)
+  li
+    =link_to _("Countries"), countries_path
+-if can?(:index, Continent)
+  li
+    =link_to _("Continents"), continents_path
+-if can?(:index, Currency)
+  li
+    =link_to _("Currencies"), currencies_path
+-if can?(:index, Incoterm)
+  li
+    =link_to _("Incoterms"), incoterms_path
+-if can?(:index, Phrase)
+  li
+    =link_to _("Text blocks"), phrases_path
+-if can?(:index, Property)
+  li
+    =link_to _("Properties"), properties_path
+-if can?(:index, Stocklist)
+  li
+    =link_to _("Stocklists"), stocklists_path
+-if can?(:index, Login)
+  li
+    =link_to _("Logins"), logins_path

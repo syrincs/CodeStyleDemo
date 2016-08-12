@@ -1,0 +1,52 @@
+-provide :page_title, _("My offers")
+
+.panel.panel-default
+  .panel-heading=_("Tools")
+  .list-group
+    =link_to _("Add new offer"), new_offer_path(offer: {user_id: current_user.id}), class: "list-group-item"
+
+.panel.panel-default
+  .panel-heading Filter
+  .panel-body
+    =simple_form_for @filter, url: assigned_offers_path, method: :get, html: {class: "form-vertical"}, wrapper: :vertical_form do |f|
+      =f.input :id, label: _("Id")
+      =f.input :query, label: _("Free text search")
+      .pull-right
+        =f.submit _("Clear"), type: "reset", class: "btn clear", name: "clear"
+      =f.submit _("Apply filters"), class: "btn btn-primary"
+
+.panel.panel-default#bulk-operations
+  .panel-heading=_("Bulk operations")
+  .list-group
+    =link_to _("Mark as already sold"), "#", class: "list-group-item", data: {operation: "bulk_delete"}
+    =link_to _("Mark as available again"), "#", class: "list-group-item", data: {operation: "bulk_resurrect"}
+    -if can?(:new, OnetimeMailing)
+      =link_to _("Send by email"), "#", class: "list-group-item send-by-email"
+
+=semantic_navigation class: "nav nav-tabs" do |n|
+  -n.item "Waiting for reply from seller", assigned_offers_path(filter: {state: "waiting_reply_seller"}), highlights_on: proc{ params[:filter][:state] == "waiting_reply_seller" }
+  -n.item "Available", assigned_offers_path(filter: {state: "available"}), highlights_on: proc{ params[:filter][:state] == "available" }
+  -n.item "Sold", assigned_offers_path(filter: {state: "sold"}), highlights_on: proc{ params[:filter][:state] == "sold" }
+
+=form_tag bulk_operation_offers_path(return_to: assigned_offers_path(filter: params[:filter])), id: "list" do
+  table.table.table-hover.table-striped
+    thead
+      tr
+        th=check_box_tag "toggler", nil, false
+        th=link_to_order _("No"), "id", @filter
+        th=link_to_order _("Seller"), "seller", @filter
+        th=link_to_order _("Reference"), "reference", @filter
+        th=link_to_order _("Brand"), "brand", @filter
+        th=link_to_order _("Model"), "modell", @filter
+        th=link_to_order _("Age"), "age", @filter
+        th=link_to_order _("Updated"), "updated", @filter
+    =render "assigned"
+
+coffeeview:
+  $ ->
+    $("#bulk-operations").on "click", "a.send-by-email", (e) ->
+      e.preventDefault()
+      form = $("form#list")
+      $.get(<%=new_onetime_mailing_path%>, form.serialize())
+
+    $("#filter_user").user_autocomplete(<%=autocomplete_users_path%>, "dealer")

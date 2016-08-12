@@ -1,0 +1,30 @@
+.modal-content
+  =simple_form_for @inquiry_by_staff, :url => inquiry_by_staff_path, html: {class: "form-horizontal"}, remote: true do |f|
+    =f.input :buyable_id, as: :hidden
+    =f.input :buyable_type, as: :hidden
+    .modal-header
+      a.close(data-dismiss="modal") ×
+      h4.modal-title=_("Add new prospect")
+
+    .modal-body
+      =f.input :buyable, as: :string, label: _("Item"), input_html: {value: buyable(@inquiry_by_staff.buyable), disabled: true}, required: false
+      -@inquiry_by_staff.errors[:user_id].each{ |error| @inquiry_by_staff.errors[:user] << error }
+      =f.input :user, as: :string, label: _("Buyer"), input_html: {value: @inquiry_by_staff.user ? @inquiry_by_staff.user.fullname : "", id: "inquiry_by_staff_user"}, required: false, autofocus: true
+      =f.input :user_id, as: :hidden
+      =f.input :assigned_employee_id, :label => _("Sales contact"), :collection => User.staff.sort_by(&:fullname).map{ |user| [user.fullname, user.id] }, prompt: true
+      =f.input :message, as: :text, label: false, input_html: {class: "editor"}
+
+    .modal-footer
+      .btn-group.pull-left
+        =f.submit _("Submit"), class: "btn btn-primary", data: {disable_with: _("Please wait...")}
+        =button_tag "Cancel", class: "btn btn-default", "data-dismiss" => "modal"
+
+coffeeview:
+  width = $("#modal").find("textarea").outerWidth() + 40
+  $("#modal").find(".modal-dialog").innerWidth(width)
+
+  enableEditors("form#new_inquiry_by_staff")
+
+  $("#inquiry_by_staff_user").user_autocomplete(<%=autocomplete_users_path%>, "contact")
+
+  $("#inquiry_by_staff_assigned_employee_id").select2()

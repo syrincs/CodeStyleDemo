@@ -1,0 +1,42 @@
+-provide :page_title,  @category.name
+
+.white-wrap.header-margin
+  section.container
+    -unless current_user && ["employee", "manager", "admin"].include?(current_user.role)
+      =render "searches/search_input"
+      =render "layouts/sidebar"
+
+    .span9
+      ul.breadcrumb.breadcrumb-category
+        li
+          =link_to "Home", root_path
+          span.divider
+            | / 
+        -@category.path_ids.each do |cat_id|
+          li.active
+            =link_to Category.find(cat_id).name, category_path(cat_id)
+            span.divider 
+              | /
+        li.pull-right
+          =link_to :back
+            .fa.fa-chevron-left
+            |  Go back
+
+      -if @subcategories.present?
+        h2.centered.strong =@category.name
+        hr
+        ul.categories-list
+          -@subcategories.each do |category|
+            li.span2
+              =link_to category, class: "categories-link"
+                h5
+                  =category.name
+                  | &nbsp;
+                  span.badge =number_with_delimiter category.subtree_approved_offers_count
+                =image_tag "redesign2015/offset_machine.png", class: "categories-icon"
+        .clear
+        br
+        =render "category_grid"
+
+      -else
+        =render "category_grid"

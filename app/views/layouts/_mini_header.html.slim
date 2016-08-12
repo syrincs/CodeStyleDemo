@@ -1,0 +1,15 @@
+.foto-service.small-header
+  .foto-pattern
+    ul.container.breadcrumb
+      li
+        =link_to "Home", root_path
+        span.divider 
+          | //
+      li.active
+        a href="#"
+          =request.path.split("/")[-1]
+    .container
+      h3.page-title.pull-left
+        | 
+        small 
+          =yield :header_title

@@ -1,0 +1,9 @@
+$ ->
+  $(document).on "click", "a.mark-read, a.mark-unread", (e) ->
+    $el = $(@)
+    e.preventDefault()
+    $.ajax
+      url: $el.data("url")
+      method: "put"
+      success: (data) ->
+        $el.closest("td").html(data)

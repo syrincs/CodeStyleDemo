@@ -1,0 +1,10 @@
+=simple_form_for @descriptiongroup, html: { class: "form-horizontal" } do |f|
+  =field_set_tag "Description group" do |d|
+    / -if @descriptiongroup.id
+    /   =f.input :id, as: :string, label: _("Id"), input_html: { value: @descriptiongroup.id, disabled: true }, required: false
+    /   =f.input :created_at, as: :string, label: _("Created"), input_html: { value: time(@descriptiongroup.created_at, false), disabled: true }, required: false
+    /   =f.input :updated_at, as: :string, label: _("Updated"), input_html: { value: time(@descriptiongroup.updated_at, false), disabled: true }, required: false
+    =f.input :name, label: _("Name")
+  .form-actions
+    =f.submit _("Submit"), class: "btn btn-primary", data: { disable_with: _("Please wait...") }
+    =link_to "Cancel", :back, class: "btn btn-default"

@@ -1,0 +1,43 @@
+-provide :page_title, _("Models we sell")
+-provide :header_title, _("Models we sell")
+/ -provide :toolbar do
+/   input#filter.form-control(type="text" placeholder="Filter by name...")
+
+.white-wrap.header-margin
+  section.container
+    =render "layouts/sidebar"
+    .span9
+      ul.breadcrumb.breadcrumb-category
+        li
+          =link_to "Home", root_path
+          span.divider
+            | / 
+        li.active
+          =link_to _("Models we sell"), overview_modells_path
+          span.divider 
+            | /
+      br
+      =render "searches/search_input"
+
+      =render "overview_list"
+
+coffeeview:
+  $ ->
+    $(document). on "click", "a.modell", (e) ->
+      e.preventDefault()
+      link = $(@)
+      form = $("<form>").attr(action: <%=searches_path%>, method: "POST").hide()
+      form.append($("<input>").attr(type: "hidden", name: "authenticity_token", value: $('meta[name="csrf-token"]').attr('content')))
+      form.append($("<input>").attr(type: "hidden", name: "search[modell_id]", value: link.data("id")))
+      form.appendTo("body").submit()
+
+/ $("#filter").on "input", (e) ->
+/   input = $(@)
+/   idleWait 250, ->
+/     $.ajax
+/       dataType: "html"
+/       url: <%=overview_modells_path(:remote => true)%>
+/       data:
+/         filter: input.val()
+/       success: (data) ->
+/         $(".table").html(data)

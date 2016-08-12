@@ -1,0 +1,34 @@
+-if @inquiries.empty?
+  tbody
+    tr
+      td(colspan=6)
+        =_("No unassigned inquiries found.")
+-else
+  tbody
+    -@inquiries.each do |inquiry|
+      tr
+        td=inquiry.id
+        td=buyable(inquiry.buyable)
+        td=inquiry.user.fullname
+        td=inquiry.seller.fullname
+        td
+          .anchor
+            =ago inquiry.last_contact_at
+        td
+          .tools.btn-group
+            =link_to inquiry, class: "btn btn-primary btn-sm clickable"
+              i.icon-white.icon-search
+              span
+                | &nbsp;
+                =_("Show inquiry")
+
+            =link_to content_tag("span", "", class: "caret"), "#", class: "btn btn-default btn-sm dropdown-toggle", data: {toggle: "dropdown"}
+            ul.dropdown-menu.pull-right
+              li=link_to _("Show item"), inquiry.buyable
+              li=link_to _("Edit item"), [:edit, inquiry.buyable]
+              li=link_to _("Show buyer"), inquiry.user
+
+  -if @more > 0
+    tfoot
+      tr
+        td(colspan=10)=link_to _("Show the next %{count} of %{more} more entries.") % {count: number_with_delimiter([@batch, @more].min), more: number_with_delimiter(@more)}, unassigned_inquiries_path(remote: true, offset: @offset + @batch), class: "more"

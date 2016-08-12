@@ -1,0 +1,27 @@
+doctype html
+html(lang=I18n.locale)
+  head
+    =render "head"
+    =stylesheet_link_tag "print", media: "all"
+    =javascript_include_tag "print"
+  body
+    .container
+      .header
+        =image_tag "logo-print.gif"
+        .address
+          |H. Roesinger & Partner E.U.R.L
+          br
+          |6, Rue de l’Hotel de ville
+          br
+          F-68330 Huningue
+        .contact
+          |#{_("Phone:")} +33 389-70930-0
+          br
+          |#{_("Fax:")} +33 389-69920-0
+          br
+          |#{_("Email:")} edb@roepa.com
+      .content
+        =yield
+      .footer
+
+

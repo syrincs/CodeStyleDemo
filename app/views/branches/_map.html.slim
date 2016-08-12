@@ -1,0 +1,29 @@
+.row
+  .col-md-30
+    .map
+  .col-md-10
+    p
+      strong=_("Address")
+      br
+      =nl2br(h(@branch.address))
+      br
+      =@branch.country.name
+    .prepend-top=link_to _("Open map in new window"), "https://maps.google.com/maps?hl=#{I18n.locale}&q=#{CGI.escape(address)}", target: "_blank", class: "btn btn-default"
+
+coffeeview:
+  $ ->
+    [lat, lng] = <%=address%>.split(" ")
+    position = new google.maps.LatLng(lat, lng)
+
+    map = new google.maps.Map $(".map")[0],
+      zoom: 15
+      center: position
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+
+    marker = new google.maps.Marker
+      map: map
+      position: position
+
+    infowindow = new google.maps.InfoWindow
+      content: <%=info%>
+    infowindow.open(map, marker)

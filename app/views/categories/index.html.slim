@@ -1,0 +1,25 @@
+-provide :page_title, _("Categories")
+
+-unless current_user && ["employee", "manager", "admin"].include?(current_user.role)
+  =render "searches/search_input"
+  =render "layouts/sidebar"
+
+  .span9
+    ul.breadcrumb.breadcrumb-category
+      li
+        =link_to "Home", root_path
+        span.divider
+          | / 
+      li.active
+        =link_to "All categories", categories_path
+        span.divider 
+          | /
+    br
+    =render "list"
+-else
+  .span9
+    .master-toolbar.btn-group
+      =link_to fa_icon("file", text: _("New category")), new_category_path(category: {parent_id: @root_id}), class: "btn btn-primary"
+    br
+    hr
+    =render "list"

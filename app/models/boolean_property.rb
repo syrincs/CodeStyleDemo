@@ -1,0 +1,2 @@
+class BooleanProperty < Property
+end

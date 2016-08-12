@@ -1,0 +1,88 @@
+-if @offers.empty?
+    h3=_("No matching offers found.")
+-else
+  hr
+  .sort-bar-wrap
+    ul.inline.sort-bar.pull-left
+      li
+        a href="#" 
+          i.fa-list.fa
+          | List view
+      li.sort-bar-active
+        a href="#" 
+          i.fa-th.fa
+          | Grid view
+    .btn-group.pull-left
+      button.btn.active.tracker data-id="sort" data-value="price" 
+        | Price
+        i.icon-arrow-up
+      button.btn.tracker data-id="sort" data-value="year" 
+        | Year
+      button.btn.tracker data-id="sort" data-value="condition" 
+        | Condition
+      button.btn.tracker data-id="sort" data-value="size" 
+        | Size
+      button.btn.tracker data-id="sort" data-value="location" 
+        | Location
+    /=page_entries_info @offers if params[:offers_page]
+    .select-wrap.pull-right
+      select#shop-select name="shop-select" tabindex="1" 
+        option value=""  Show 12 items per page
+        option value="1"  Show 25 items per page
+        option value="2"  Show 50 items per page
+        option value="3"  Show 100 items per page
+
+  =will_paginate @offers, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "offers_page"
+
+  -@offers.in_groups_of(3).each do |group|
+    .row
+      -group.each do |offer|
+        -if offer
+          .span3
+            ul.image-gallery.category-grid
+              li.hover-item
+                .view.catalogue-img
+                  -if can?(:edit, offer)
+                    .overlay
+                      ul.social
+                        li.custom-tooltip.blue-tooltip title="Edit offer"
+                          =link_to (fa_icon "pencil-square-o"), edit_offer_path(offer), class: "hide-tooltip"
+                        -if can?(:destroy, offer)
+                          li.custom-tooltip.blue-tooltip title="Delete offer"
+                            =link_to (fa_icon "remove"), offer_path(offer), class: "hide-tooltip", method: :delete, data: { confirm: _("Are you sure?") }
+                        -if can?(:show, offer.user)
+                          li.custom-tooltip.blue-tooltip title="Show seller"
+                            =link_to (fa_icon "user"), offer.user, class: "hide-tooltip"
+                          li.custom-tooltip.blue-tooltip title="Show inquiries"
+                            =link_to (fa_icon "group"), [:inquiries, offer], class: "hide-tooltip"
+                  =link_to offer
+                    -if (image = offer.preview_image && Rails.env.production?)
+                      =image_tag image.normal_url
+                    -else
+                      =image_tag "redesign2015/no_image_available_big.png"
+                .image-capture
+                  h2.font-style-16.bold
+                    =link_to "#{offer.modell.brand.name} #{offer.modell.name}".truncate(32), offer, class: "link"
+                  h5.simple-text-14.dark-grey-text
+                    strong Year: 
+                    =offer.year
+                    br
+                    strong Condition: 
+                    =offer.condition
+                    br
+                    strong Size: 
+                    =length(offer.format)
+                    br 
+                    strong Location: 
+                    =offer.location
+                    br 
+                    strong Reference No: 
+                    =offer.id
+                  / p.fixed-height-p.simple-text-12
+                  /   =offer.description.truncate(130)
+                  .bold.cost.pull-left
+                    =price(offer)
+                  =link_to "Show offer", offer, class: "btn btn-info cart pull-right"
+  br
+  br
+  =will_paginate @offers, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "offers_page"

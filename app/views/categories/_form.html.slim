@@ -1,0 +1,12 @@
+=simple_form_for @category, :html => {:class => "form-horizontal"} do |f|
+  =field_set_tag _("Category") do
+    -if @category.id
+      =f.input :id, as: :string, label: _("Id"), input_html: {value: @category.id, disabled: true}, required: false
+      =f.input :created_at, as: :string, label: _("Created"), input_html: {value: time(@category.created_at, false), disabled: true}, required: false
+      =f.input :updated_at, as: :string, label: _("Updated"), input_html: {value: time(@category.updated_at, false), disabled: true}, required: false
+    =f.input :name, label: _("Name")
+    =f.input :position, as: :string, label: _("Position")
+    =f.input :parent_id, as: :select, label: _("Parent"), collection: categories_as_padded_tree
+    =f.association :descriptiongroup, label: _("Description group"), collection: Descriptiongroup.for_select
+  .form-actions
+    =f.submit _("Submit"), class: "btn btn-default", data: {disable_with: _("Please wait...")}

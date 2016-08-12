@@ -1,0 +1,18 @@
+-provide :page_title, _("Special offers")
+
+=render "menu"
+
+-if @offers.any?
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th=_("No")
+        th=_("Brand")
+        th=_("Model")
+        th=_("Description")
+        th=_("Age")
+        th=_("Seller")
+        th
+    =render "special"
+-else
+  p=_("No special offers existing.")

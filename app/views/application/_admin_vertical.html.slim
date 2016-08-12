@@ -1,0 +1,103 @@
+ul.nav.nav-pills.nav-stacked.pull-left.admin-nav
+  -if offers_admin_menu_items.any?
+    =content_tag :li, class: active_class?(offers_path, unapproved_offers_path, special_offers_path, \
+                             stocklist_offers_path, outdated_offers_path, deleted_offers_path)
+      =link_to offers_admin_menu_items.first[1]
+        =fa_icon "star", text: "#{_("Offers")}", class: "fa-fw"
+
+  -if inquiries_admin_menu_items.any?
+    =content_tag :li, class: active_class?(inquiries_admin_menu_items.first[1], inquiries_admin_menu_items.last[1])
+      =link_to inquiries_admin_menu_items.first[1]
+        =fa_icon "question-circle", text: "#{_("Inquiries")}", class: "fa-fw"
+
+  -if users_admin_menu_items.any?
+    =content_tag :li, class: active_class?(users_admin_menu_items.first[1], users_admin_menu_items.last[1])
+      =link_to users_admin_menu_items.first[1]
+        =fa_icon "users", text: "#{_("Users")}", class: "fa-fw"
+
+  -if can?(:index, Search)
+    =content_tag :li, class: active_class?(searches_path)
+      =link_to searches_path
+        =fa_icon "search", text: "#{_("Searches")}", class: "fa-fw"
+
+  -if can?(:index, Mailing)
+    =content_tag :li, class: active_class?(mailings_path)
+      =link_to mailings_path
+        =fa_icon "envelope", text: "#{_("Mailings")}", class: "fa-fw"
+
+  -if can?(:index, Package)
+    =content_tag :li, class: active_class?(packages_path)
+      =link_to packages_path
+        =fa_icon "gift", text: "#{_("Package deals")}", class: "fa-fw"
+
+  -if can?(:index, Branch)
+    =content_tag :li, class: active_class?(branches_path)
+      =link_to branches_path
+        =fa_icon "fort-awesome", text: "#{_("Branches")}", class: "fa-fw"
+
+  -if can?(:index, Brand)
+    =content_tag :li, class: active_class?(brands_path)
+      =link_to brands_path
+        =fa_icon "copyright", text: "#{_("Brands")}", class: "fa-fw"
+
+  -if can?(:index, Modell)
+    =content_tag :li, class: active_class?(modells_path)
+      =link_to modells_path
+        =fa_icon "tag", text: "#{_("Models")}", class: "fa-fw"
+
+  -if can?(:index, ModellGroup)
+    =content_tag :li, class: active_class?(modell_groups_path)
+      =link_to modell_groups_path
+        =fa_icon "tags", text: "#{_("Model groups")}", class: "fa-fw"
+
+  -if can?(:index, Category)
+    =content_tag :li, class: active_class?(categories_path)
+      =link_to categories_path
+        =fa_icon "folder", text: "#{_("Categories")}", class: "fa-fw"
+
+  -if can?(:index, Descriptiongroup)
+    =content_tag :li, class: active_class?(descriptiongroups_path)
+      =link_to descriptiongroups_path
+        =fa_icon "th-list", text: "Description groups", class: "fa-fw"
+
+  -if can?(:index, Country)
+    =content_tag :li, class: active_class?(countries_path)
+      =link_to countries_path
+        =fa_icon "flag", text: "#{_("Countries")}", class: "fa-fw"
+
+  -if can?(:index, Continent)
+    =content_tag :li, class: active_class?(continents_path)
+      =link_to continents_path
+        =fa_icon "globe", text: "#{_("Continents")}", class: "fa-fw"
+
+  -if can?(:index, Currency)
+    =content_tag :li, class: active_class?(currencies_path)
+      =link_to currencies_path
+        =fa_icon "eur", text: "#{_("Currencies")}", class: "fa-fw"
+
+  -if can?(:index, Incoterm)
+    =content_tag :li, class: active_class?(incoterms_path)
+      =link_to incoterms_path
+        =fa_icon "file-text", text: "#{_("Incoterms")}", class: "fa-fw"
+
+  -if can?(:index, Phrase)
+    =content_tag :li, class: active_class?(phrases_path)
+      =link_to phrases_path
+        =fa_icon "align-left", text: "#{_("Text blocks")}", class: "fa-fw"
+
+  -if can?(:index, Property)
+    =content_tag :li, class: active_class?(properties_path)
+      =link_to properties_path
+        =fa_icon "cog", text: "#{_("Properties")}", class: "fa-fw"
+
+  -if can?(:index, Stocklist)
+    =content_tag :li, class: (active_class?(stocklists_path) if @stocklists)
+      =link_to stocklists_path
+        =fa_icon "list-ol", text: "#{_("Stocklists")}", class: "fa-fw"
+
+  -if can?(:index, Login)
+    =content_tag :li, class: active_class?(logins_path)
+      =link_to logins_path
+        =fa_icon "lock", text: "#{_("Logins")}", class: "fa-fw"
+  br
+  br

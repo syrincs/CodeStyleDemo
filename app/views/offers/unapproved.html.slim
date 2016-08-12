@@ -1,0 +1,21 @@
+-provide :page_title, _("Unapproved offers")
+
+=render "menu"
+
+-if @offers.any?
+  =form_tag approve_offers_path
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th=check_box_tag "toggler", nil, true
+          th=_("No")
+          th=_("Brand")
+          th=_("Model")
+          th=_("Description")
+          th=_("Age")
+          th=_("Seller")
+          th
+      =render "unapproved"
+    =submit_tag _("Approve selected offers"), data: { confirm: _("Are you sure?"), disable_with: _("Please wait...") }, class: "btn btn-primary gradient"
+-else
+  p=_("No unapproved offers existing.")

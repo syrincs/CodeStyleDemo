@@ -1,0 +1,40 @@
+-provide :page_title, _("Brands")
+
+=will_paginate @brands, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "brands_page"
+
+table#brands.table.table-striped.table-hover
+  caption
+    h4.pull-left 
+      =_("Brands")
+    .records.pull-left
+      =page_entries_info @brands if @brands
+    form
+      =text_field_tag "filter", @filter, class: "form-control", placeholder: "Filter by name..."
+    p.create.btn-group
+      =link_to fa_icon("plus-circle", text: "New brand"), [:new, :brand], remote: true, class: "btn btn-info"
+  thead
+    tr
+      th=_("Name")
+      th=_("Models")
+      th=_("Offers")
+      th
+  tbody.table-partial
+    =render partial: "index", locals: { brands: @brands }
+
+=will_paginate @brands, inner_window: 2, outer_window: 1, renderer: 'BootstrapPaginationHelper::LinkRenderer', param_name: "brands_page"
+
+coffeeview:
+  $ ->
+    $("#filter").on "input", (e) ->
+      input = $(@)
+      idleWait 250, ->
+        $.ajax
+          dataType: "html"
+          url: <%=brands_path(remote: true)%>
+          data:
+            filter: input.val()
+          success: (data) ->
+            table = $("table#brands")
+            table.find("tbody *, tfoot").remove()
+            table.append(data)
+            fullTableRowClickable()

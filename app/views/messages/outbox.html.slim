@@ -1,0 +1,35 @@
+-provide :page_title, _("My outbox")
+
+.panel.panel-default
+  .panel-heading Filter
+  .panel-body
+    form
+      =text_field_tag "filter", @filter, class: "form-control", placeholder: "Name"
+
+=render "menu"
+
+table#outbox.table.table-striped.table-hover
+  thead
+    tr
+      th
+        =_("Date")
+      th
+        =_("Topic")
+      th
+        =_("Recipients")
+  =render "outbox"
+
+coffeeview:
+  $ ->
+    $("#filter").on "input", (e) ->
+      input = $(@)
+      idleWait 250, ->
+        $.ajax
+          dataType: "html"
+          url: <%=outbox_messages_path(remote: true)%>
+          data:
+            filter: input.val()
+          success: (data) ->
+            table = $("table#outbox")
+            table.find("tbody, tfoot").remove()
+            table.append(data)

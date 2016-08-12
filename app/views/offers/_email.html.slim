@@ -1,0 +1,60 @@
+-images = offer.images.normal.for_index
+-wide_images = offer.images.wide.for_index
+-wide_images, images = images, [] if images.count == 1
+
+.offer
+  h1.important=_("Offer %{name}") % {name: offer.id}
+
+  p=link_to _("Please click here to make an inquiry."), offer_url(offer)
+
+  h1 #{offer.brand.name} #{offer.modell.name}
+
+  |#{_("Age:")} #{offer.year} #{offer.year_remarks}
+  br
+  |#{_("Available:")} #{offer.availability}
+  br
+  |#{_("Location:")} #{offer.location.name}
+  -if offer.condition.present?
+    br
+    |#{_("Condition:")} #{offer.condition}
+  -if offer.cylinders_condition.present?
+    br
+    |#{_("Condition of cylinders:")} #{offer.cylinders_condition}
+  br
+  |#{_("Still in production:")} #{offer.in_production? ? _("Yes") : _("No")}
+  br
+  |#{_("Test possible:")} #{offer.test_possible? ? _("Yes") : _("No")}
+  br
+  |#{_("Complete and in working condition:")} #{offer.complete_and_working? ? _("Yes") : _("No")}
+  -if offer.serial_no.present?
+    br
+    |#{_("Serial number:")} #{offer.serial_no}
+  -if offer.machine_no.present?
+    br
+    |#{_("Machine number:")} #{offer.machine_no}
+
+  h2=_("Technical details")
+  -offer.modell.properties.each do |property|
+    -next unless property[:value].present?
+    |#{property[:name]}: #{property[:value]}
+    br
+  -offer.properties.each do |property|
+    -next unless property[:value].present?
+    |#{property[:name]}: #{property[:value]}
+    br
+
+  br
+  =offer_description(offer)
+
+  h1.important #{_("Price:")} #{price(offer)}
+
+  .images
+    -wide_images.each do |image|
+      .wide_image
+        =image_tag image.preview_url
+        =image.remarks
+    -images.each do |image|
+      .image
+        =image_tag image.preview_url
+        =image.remarks
+

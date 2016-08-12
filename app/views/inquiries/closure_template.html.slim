@@ -1,0 +1,7 @@
+p=_("Dear %{name},") % {name: @inquiry.contact.name}
+
+p=_("I've closed this inquiry upon your request.")
+
+p==_("Please <<click here>> to contact me again in this matter."){ inquiry_url(@inquiry, autologin_secret: @inquiry.autologin_secret, anchor: "write") }
+
+=render "application/email_signature", user: @closure.user

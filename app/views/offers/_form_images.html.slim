@@ -1,0 +1,9 @@
+-offer.images.for_index.each do |image|
+  .image
+    =hidden_field_tag "offer[images][]", image.id
+    =link_to image_tag(image.preview_url), image.normal_url, target: "_blank"
+    br
+    =image.remarks
+    br
+    ='link_to _("edit"), [:edit, offer, image], :remote => true
+    =link_to _("delete"), [offer, image], method: :delete, remote: true, data: {confirm: _("Are you sure?")}

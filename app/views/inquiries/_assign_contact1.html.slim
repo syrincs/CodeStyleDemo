@@ -1,0 +1,15 @@
+.modal-dialog
+  .modal-content
+    =simple_form_for @inquiry, :url => [:assign_contact, @inquiry], :html => {:class => "message form-horizontal"}, remote: true do |f|
+      .modal-header
+        a.close(data-dismiss="modal") ×
+        h4.modal-title=_("Assign new sales contact to inquiry %{id}") % {:id => @inquiry.id}
+
+      .modal-body
+        =f.input :assigned_employee_id, :label => _("Sales contact"), :collection => User.staff.sort_by(&:fullname).map{ |user| [user.fullname, user.id] }, :prompt => true
+
+      .modal-footer
+        =f.submit _("Submit"), class: "btn btn-primary", data: {disable_with: _("Please wait...")}
+
+coffeeview:
+  $("#inquiry_assigned_employee_id").select2()

@@ -1,0 +1,8 @@
+-branch_contacts.order(:position).each do |contact|
+  tr
+    td=contact.name
+    td=contact.email
+    td
+      .tools.btn-group
+        =link_to fa_icon("pencil"), [:edit, @branch, contact], remote: true, class: "btn btn-primary"
+        =link_to fa_icon("trash-o"), [@branch, contact], remote: true, class: "btn btn-primary", method: :delete, data: {confirm: _("Are you sure?")}

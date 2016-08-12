@@ -1,0 +1,262 @@
+-provide :page_title, _("Offer %{name}") % {name: @offer.id}
+-provide :javascript_includes do
+  script async="async" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-567559244443225c" type="text/javascript" 
+
+-images = @offer.images.for_index
+-videos = @offer.videos.for_index
+
+.row.span9
+  -unless current_user && ["employee", "manager", "admin"].include?(current_user.role)
+    =render "searches/search_input"
+    -provide :sidebar
+      =render "layouts/sidebar"
+
+    ul.breadcrumb.breadcrumb-category
+      li
+        =link_to "Home", root_path
+        span.divider
+          | / 
+      -@offer.category.path_ids.each do |cat_id|
+        li.active
+          =link_to Category.find(cat_id).name, category_path(cat_id)
+          span.divider 
+            | /
+      li.active
+        =link_to "Offer #{@offer.id}", offer_path(@offer.id)
+      li.pull-right
+        =link_to :back
+          .fa.fa-chevron-left
+          |  Go back
+    br
+ul.nav.nav-pills
+  li.dropdown
+    =button_tag fa_icon("chevron-down", text: "Actions", right: true), class: "my-button pull-right"
+    ul#menu1.dropdown-menu
+      li.nav-header Offer:
+      -if can?(:edit, @offer)
+        li
+          =link_to "Edit", [:edit, @offer]
+      -if can?(:resurrect, @offer)
+        li
+          =link_to "Resurrect", [:resurrect, @offer], method: :put, data: {confirm: _("Are you sure?")}
+      -if can?(:destroy, @offer)
+        li
+          =link_to "Delete", @offer, method: :delete, data: {confirm: _("Are you sure?")}
+      -if can?(:inquiries, @offer)
+        li
+          =link_to [:inquiries, @offer]
+            | Inquiries  
+            span.badge ="%{active}" % { active: @offer.open_inquiries_count }
+            |  -    
+            span.badge ="%{total}" % { total: @offer.inquiries_count }
+      li.divider
+      li.nav-header Seller:
+      -if can?(:offers, @offer.user)
+        li
+          =link_to [:offers, @offer.user]
+            | All offers of seller  
+            span.badge ="%{total}" % { total: @offer.user.offers_count }
+      -if can?(:show, @offer.user)
+        li
+          =link_to "Show seller", @offer.user
+      -if can?(:staff_message, @offer)
+        li
+          =link_to _("Contact seller"), [:staff_message, @offer], remote: true
+      -if can?(:staff_seller_message, @offer)
+        li
+          =link_to _("Write message as seller"), [:staff_seller_message, @offer], remote: true
+      li.divider
+      li.nav-header Mail:
+      -if can?(:create, Mailing)
+        li
+          =link_to "Send as bulk mailing", new_mailing_path(offer_id: @offer.id)
+      -if can?(:create, OnetimeMailing)
+        li
+          =link_to "Send by email", new_onetime_mailing_path(offer_id: @offer.id), remote: true
+      -if can?(:seller_message, @offer)
+        li
+          =link_to _("Contact ROEPA staff"), [:seller_message, @offer], remote: true
+  br
+  br
+  hr
+  .row.span4.item-product
+
+    h2.section-title 
+      strong Brand: 
+      =@offer.brand.name
+      br
+      strong Model: 
+      =@offer.modell.name
+      br
+      strong Price: 
+      strong.blue-text ="#{price(@offer)} %s" % (@offer.incoterm.code if @offer.incoterm)
+
+
+    p.simple-text-14 =offer_description(@offer)
+    .btn-group
+      =link_to [:print, @offer], target: "_blank", class: "btn btn-primary cart"
+        i.fa.fa-print &nbsp;
+        =_("Print version")
+      | &nbsp;&nbsp;
+      =render 'currency_converter_link', object: @offer
+      -link = new_inquiry_link(@offer)
+      .btn.btn-primary
+        =link_to link[1], link[2]
+          i.fa.fa-inverse.fa-quote-right &nbsp;
+          =link[0]
+    .clear
+    br
+    | Share it:
+    .addthis_sharing_toolbox
+
+  .span3.offset1
+    #carousel-custom.carousel.slide data-ride="carousel" 
+      .carousel-outer
+        -if images.any?
+          -if @offer.hide_images?
+            .carousel-outer
+              .carousel-inner
+                =image_tag "redesign2015/image_hidden.jpg", class: "item active"
+          -else
+            -thumb_exists = []
+            .carousel-outer
+              .carousel-inner
+                -images.each_with_index do |image, index|
+                  -if FileTest.exist? "#{Rails.root}/app/assets/images/redesign2015/#{@offer.preview_image.normal_url}"
+                    =image_tag @offer.preview_image.normal_url, class: "#{ "active" if index == 0 }"
+                    -thumb_exists << true
+                  -else
+                    =image_tag "http://placehold.it/570x330&text=image_#{image.id}_missing", class: "item #{ "active" if index == 0 }"
+                    -thumb_exists << false
+              a.left.carousel-control data-slide="prev" href="#carousel-custom" 
+                span.icon-chevron-left
+              a.right.carousel-control data-slide="next" href="#carousel-custom" 
+                span.icon-chevron-right
+            ol.carousel-indicators.mCustomScrollbar
+              -images.each_with_index do |image, index|
+                =content_tag :li, "data-slide-to" => index, "data-target" => "#carousel-custom", class: "#{ "active" if index == 0 }"
+                  -if thumb_exists[index]
+                    =image_tag @offer.preview_image.normal_url, class: "custom-thumb"
+                  -else
+                    =image_tag "http://placehold.it/95x50&text=#{image.id}"
+        -else
+          .carousel-outer
+            .carousel-inner
+              =image_tag "redesign2015/no_image_available_big.png"
+  .row
+    .span9.item-product
+      hr
+      .span4 
+        table
+          tbody
+            tr
+              td.bold Reference No
+              td=@offer.id
+            tr
+              td.bold=_("Year")
+              td #{@offer.year} #{@offer.year_remarks}
+            -if @offer.condition.present?
+              tr
+                td.bold=_("Condition")
+                td=@offer.condition
+            -if @offer.cylinders_condition.present?
+              tr
+                td.bold=_("Condition of cylinders")
+                td=@offer.cylinders_condition
+            tr
+              td.bold=_("Location")
+              td=@offer.location.name
+            tr
+              td.bold=_("Still in production")
+              td=@offer.in_production? ? _("Yes") : _("No")
+            tr
+              td.bold=_("Test possible")
+              td=@offer.test_possible? ? _("Yes") : _("No")
+            tr
+              td.bold Complete / Working
+              td=@offer.complete_and_working? ? _("Yes") : _("No")
+            tr
+              td.bold=_("Available")
+              td=@offer.availability
+            -if @offer.serial_no.present?
+              tr
+                td.bold=_("Serial number")
+                td=@offer.serial_no
+            -if @offer.machine_no.present?
+              tr
+                td.bold=_("Machine number")
+                td=@offer.machine_no
+            tr
+              td.bold=_("Offer last updated")
+              td=l @offer.confirmed_at
+
+      .span4
+        table
+          tbody
+            -@offer.modell.properties.each do |property|
+              -next unless property[:value].present?
+              tr
+                td.strong=property[:name]
+                td=property[:value]
+            -@offer.properties.each do |property|
+              -next unless property[:value].present?
+              tr
+                td.strong=property[:name]
+                td=property[:value]
+      .clear
+      hr
+      .span9
+        .offer.plain
+          -if @offer.deleted?
+            .warning
+              =_("This offer has already been sold on %{date}.") % {date: l(@offer.deleted_at)}
+          -else
+            -unless @offer.approved?
+              .warning
+                =_("This offer has not been approved by our staff yet!")
+                br
+                =_("The provided details might be incorrect.")
+          .simple-text-14.adbox
+            =_("This offer is subject to prior sales until final sales-contract or proforma-invoice has been signed by us. Product description and equipment characteristics without any warranty.")
+        br
+
+        -if can?(:edit, @offer)
+          br
+          =render "messages", messages: @offer.messages
+
+
+    / .block.prepend-top
+    /   strong=_("Pictures")
+    /   br
+    /   -if images.empty?
+    /     =_("No pictures available.")
+    /   -else
+    /     -if @offer.hide_images?
+    /       =_("Pictures available upon request.")
+    /     -else
+    /       -images.each do |image| 
+    /         .image
+    /           =link_to image_tag(image.preview_url), image.normal_url
+    /           br
+    /           =image.remarks
+
+    / .block.prepend-top
+    /   strong=_("Videos")
+    /   br
+    /   -if videos.empty?
+    /     =_("No videos available.")
+    /   -else
+    /     -if @offer.hide_images?
+    /       =_("Videos available upon request.")
+    /     -else
+    /       -videos.each do |video|
+    /         .video
+    /           =link_to image_tag(video.preview_url), [@offer, video], remote: true
+
+
+coffeeview:
+  $ ->
+    $(".image a").colorbox(rel:'images')
+
+    
+

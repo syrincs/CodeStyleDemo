@@ -1,0 +1,16 @@
+.modal-dialog
+  .modal-content
+    =simple_form_for @message, :url => [:buyer_message, @inquiry], :html => {:class => "form-horizontal"}, remote: true do |f|
+      .modal-header
+        a.close(data-dismiss="modal") ×
+        h4.modal-title=_("New message concerning inquiry %{id}") % {:id => @inquiry.id}
+
+      .modal-body
+        =f.input :text, :label => false, as: :text, :autofocus => true, :input_html => {:class => "message"}
+
+      .modal-footer
+        =f.submit _("Send message"), class: "btn btn-primary", data: {disable_with: _("Please wait...")}
+
+coffeeview:
+  width = $("#modal").find("textarea").outerWidth() + 40
+  $("#modal").find(".modal-dialog").innerWidth(width)

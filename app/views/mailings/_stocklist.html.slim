@@ -1,0 +1,22 @@
+table.stocklists
+  -Category.where(:id => Offer.not_deleted.where(:id => @stocklist.offers).joins(:modell).select(:category_id)).sort_by(&:path).each do |category|
+    tbody.stocklist
+      tr
+        td(colspan=10)=category.path
+    tbody.labels
+      tr
+        td=_("Offer no.")
+        td=_("Brand")
+        td=_("Model")
+        td=_("Continent")
+        td=_("Age")
+        td.right=_("Price")
+    tbody.offers
+      -category.offers.not_deleted.where(:id => @stocklist.offers.pluck(:id)).order(:year).each do |offer|
+        tr
+          td=link_to offer.id, offer_url(offer)
+          td=offer.brand.name
+          td=offer.modell.name
+          td=offer.location
+          td=offer.year
+          td.right=price(offer)

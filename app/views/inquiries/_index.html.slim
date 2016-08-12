@@ -1,0 +1,24 @@
+-if @inquiries.empty?
+  tbody
+    tr
+      td(colspan=7)
+        =_("No matching inquiries found.")
+-else
+  tbody
+    -@inquiries.each do |inquiry|
+      tr
+        td=inquiry.id
+        td=inquiry.user.fullname
+        td=buyable(inquiry.buyable)
+        td
+          -if inquiry.assigned_employee
+            =inquiry.assigned_employee.fullname
+        td
+          .anchor
+            =ago inquiry.last_contact_at
+        td
+          .btn-group
+            =link_to fa_icon("question-circle"), inquiry, data: { original_title: _("Show inquiry") }, class: "btn btn-primary custom-tooltip blue-tooltip"
+            =link_to fa_icon("search"), inquiry.buyable, data: { original_title: _("Show item") }, class: "btn btn-primary custom-tooltip blue-tooltip"
+            =link_to fa_icon("user"), inquiry.user, data: { original_title: _("Show buyer") }, class: "btn btn-primary custom-tooltip blue-tooltip"
+            =link_to fa_icon("dollar"), inquiry.assigned_employee, data: { original_title: _("Show sales contact") }, class: "btn btn-primary custom-tooltip blue-tooltip"

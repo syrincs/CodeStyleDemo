@@ -1,0 +1,36 @@
+=javascript_include_tag "https://maps.google.com/maps/api/js?sensor=false"
+
+=simple_form_for @branch, remote: true, html: { class: "form-horizontal branch" }, defaults: { label: false } do |f|
+  .modal-content
+    .modal-header
+      button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+      h3 #{action_name.titleize} branch
+    .modal-body
+      -if @branch.id
+        ="Created at: #{time(@branch.created_at, false)}"
+        br 
+        ="Updated at: #{time(@branch.updated_at, false)}" 
+        br
+      br
+      =f.input :name, placeholder: "Enter name...", autofocus: true
+      =f.input :address, placeholder: "Enter mailing address...", input_html: {rows: 5}
+      =f.association :country, include_blank: "Select Country...", collection: Country.for_select
+      =f.input :description, placeholder: "Enter description...", input_html: {rows: 5}
+      .form-group
+        .map
+        =text_field_tag :query, nil, class: "query", placeholder: "Enter location..."
+        =submit_tag _("Lookup location")
+      =f.input :location, as: :hidden, input_html: {class: "storage"}
+      =f.input :languages, placeholder: "Enter languages..."
+      =f.input :position
+      =f.label :position, class: "tag-link"
+
+    .modal-footer
+      .tools.btn-group
+        =f.submit _("Submit"), class: "btn btn-primary", data: { disable_with: _("Please wait...") }
+        =button_tag "Cancel", class: "btn btn-default", data: { dismiss: "modal" }
+
+javascript:
+  $(function() {
+    $('form.branch .modal-body').address_selector();
+  });
