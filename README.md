@@ -25,7 +25,7 @@
         ,<span class="ojoshiro">@</span>C <span class="ojoshiro">@</span>,~' <span class="ojoshiro">@</span>,-v~' ::<span class="martin">`"""""""`</span><span class="joan">[_______]</span>::  :::  <span class="joris">| |</span> :
        'v-~,<span class="ojoshiro">@</span>,`    :  <span class="joan">(\-/)</span>   ::  : <span class="joan">;;;;;'</span> `<span class="colin">*</span>~   <span class="joris">_.-'   `-.</span>
                      <span class="joan">={   }=</span>   ~<span class="colin">*</span>' <span class="joan">;;;;;;</span> ::   :   `<span class="colin">*</span>  ::::
-        :::   `<span class="colin">*</span>  ::   <span class="joan">) (</span>    ::    <span class="joan">;;;;;;.</span>~<span class="colin">*</span>'  :::     <span class="martin">Andre(at)de monsters</span>
+        :::   `<span class="colin">*</span>  ::   <span class="joan">) (</span>    ::    <span class="joan">;;;;;;.</span>~<span class="colin">*</span>'  :::     
                :     <span class="joan">_/   \_</span>     `<span class="colin">*</span>~ <span class="joan">;;;;;;;.</span>::     ::    ::
             :: `<span class="colin">*</span>  ::<span class="joan">\     /</span> :::      <span class="joan">;;;;;;;;.</span>`<span class="colin">*</span>'     ::
          <span class="colin">*</span>'           <span class="joan">`-))'</span>      `<span class="colin">*</span>'  <span class="joan">;;;;;;;;;.</span>  :::  <span class="colin">*</span>'  ::
